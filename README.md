@@ -11,11 +11,10 @@
 
 Sqwiggle is a simple
 [ELO](https://cran.r-project.org/web/packages/fitzRoy/vignettes/elo-ratings-example.html)
-model for predicting [AFLW](https://www.afl.com.au/aflw) results built
-in R using the
+model for predicting [AFLW](https://www.afl.com.au/aflw) results built in R using the
 [fitzRoy](https://cran.r-project.org/web/packages/fitzRoy/index.html)
-and [elo](https://cran.r-project.org/web/packages/elo/index.html)
-packages. The name is derived from [Squiggle](https://squiggle.com.au/)
+and [elo](https://cran.r-project.org/web/packages/elo/index.html) packages.
+The name is derived from [Squiggle](https://squiggle.com.au/)
 
 ## A better ladder
 
@@ -27,15 +26,17 @@ in the AFLW, which is an uneven competition with a compromised fixture.
   determining the final ladder.
 
 - Similarly, whether the current ladder is reflective of the likely
-  finishing positions will depend on whether a team’s draw to date has
+  finishing positions will depend on whether a team's draw to date has
   been stronger/weaker than its overall fixture.
 
 We can see this reflected in the table below, which shows data from the
 current ladder and a predicted end-of-season ladder based on Sqwiggle.
 While both ladders have North Melbourne sitting on top undefeated, other
-teams shift position. For example, Geelong, who sit 16th and are
+teams shift position.
+For example, Geelong, who sit 16th and are
 winless, are predicted by Sqwiggle to win six of their remaining nine
-games and finish 9th. There current position reflects their opening
+games and finish 9th. 
+Their current position reflects their opening
 three games including matches against North Melbourne and Adelaide (two
 of the top three teams based on the current Sqwiggle model) and Sydney
 (this year’s biggest improver).
