@@ -69,17 +69,19 @@ ggplot(
     yintercept = 1500, 
     colour = bv.charcoal, 
     linetype  = 2) +
-  geomtextpath::geom_textline(
-    hjust = 0.15, 
-    halign = "left",
-    padding = 
-      unit(0, units = "mm"),
-  ) + # geom_line() +
+  geom_line() +
+  ggrepel::geom_text_repel(
+    data = sqwiggles_2025 |> filter(round_number==3) |> 
+      mutate(round_number = round_number + .01),
+    hjust = 0,
+    size = 3,
+    direction = "y"
+  ) +
   theme_vps_dh() +
-  scale_y_continuous(limits = c(1440,1590), name = "Sqwiggle score") +
-  scale_x_continuvps(breaks = 0L:18L, name = NULL, limits = c(0,3)) +
-  scale_colour_manual(values = team_colours)+
-  guides(colour = "none") +
+  scale_y_continuous(limits = c(1445,1585), name = "Sqwiggle score") +
+  scale_x_continuvps(breaks = 0L:18L, name = NULL, limits = c(0,3.8)) +
+ scale_colour_manual(values = unlist(team_colours))+
+  guides(colour = "none", ) +
   theme(axis.line.x = element_blank())
 
 ```
