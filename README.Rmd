@@ -1,0 +1,117 @@
+---
+output: github_document
+always_allow_html: true
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(tidyverse)
+library(vpstheme)
+library(geomtextpath)
+library(kableExtra)
+```
+
+```{r update_sqwiggle, include=FALSE}
+
+source("~/sqwiggle/sqwiggle_2025.R")
+
+```
+
+# Sqwiggle
+
+## Introduction
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+Sqwiggle is a simple [ELO](https://cran.r-project.org/web/packages/fitzRoy/vignettes/elo-ratings-example.html) model for predicting [AFLW](https://www.afl.com.au/aflw) results built in R using the [fitzRoy](https://cran.r-project.org/web/packages/fitzRoy/index.html) and [elo](https://cran.r-project.org/web/packages/elo/index.html) packages. The name is derived from [Squiggle](https://squiggle.com.au/)
+
+## A better ladder
+
+A key motivation for Sqwiggle was to better understand the state of play in the AFLW, which is an uneven competition with a compromised fixture.
+
+-   As the eighteen teams in the AFLW only play 12 games, whether a team is drawn against stronger or weaker opponents will be critical in determining the final ladder.
+
+-   Similarly, whether the current ladder is reflective of the likely finishing positions will depend on whether a team's draw to date has been stronger/weaker than its overall fixture.
+
+We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle. While both ladders have North Melbourne sitting on top undefeated, other teams shift position. For example, Geelong, who sit 16th and are winless, are predicted by Sqwiggle to win six of their remaining nine games and finish 9th. There current position reflects their opening three games including matches against North Melbourne and Adelaide (two of the top three teams based on the current Sqwiggle model) and Sydney (this year's biggest improver).
+
+```{r ladder_sqwiggle, echo=FALSE}
+
+combined_ladder |>
+  rename_with(\(x) str_replace(x,"_", " ") |> str_to_sentence()) |> 
+  knitr::kable() |> 
+   kable_styling()  |> 
+   row_spec(1:8, background = bv.crystal) |> 
+   row_spec(9:18, background = bv.white)
+
+```
+
+## Team strength
+
+As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. 
+
+Sqwiggle's estimate of each team's ELO score after each round is shown below (round zero denotes the team's end of 2024 score).
+
+```{r sqwiggle_wiggle, echo=FALSE}
+
+ggplot(
+   data = sqwiggles_2025,
+    aes(x = round_number, y = value, colour = team_club_name, label = team_club_name)
+  ) +
+  geom_hline(
+    yintercept = 1500, 
+    colour = bv.charcoal, 
+    linetype  = 2) +
+  geomtextpath::geom_textline(
+    hjust = 0.15, 
+    halign = "left",
+    padding = 
+      unit(0, units = "mm"),
+  ) + # geom_line() +
+  theme_vps_dh() +
+  scale_y_continuous(limits = c(1440,1590), name = "Sqwiggle score") +
+  scale_x_continuvps(breaks = 0L:18L, name = NULL, limits = c(0,3)) +
+  scale_colour_manual(values = team_colours)+
+  guides(colour = "none") +
+  theme(axis.line.x = element_blank())
+
+```
+
+# How well does Sqwiggle go at tipping
+
+Sqwiggle's tipping performance for 2025 is summarised below. Not bad, not great.
+
+```{r summarise_sqwiggle, echo=FALSE}
+
+tipping_results |> 
+  group_by(round_round_number) |> 
+  summarise(correct = sum(correct), games = n()) |> 
+  mutate(cumulative = cumsum(correct)) |> 
+  rename_with(
+    \(x) str_replace_all(x,"round_|_", " ")
+    |> str_to_sentence()) |> 
+  knitr::kable() |> 
+   kable_styling() 
+
+```
+
+Sqwiggles tips for the next round are below.
+
+```{r tipped_by_sqwiggle, echo=FALSE}
+
+tip_tbl |> 
+  filter(round_round_number == (last_round+1L)) |> 
+  rename_with(
+    \(x) str_replace_all(x,"round_|_|club_name", " ")
+    |> str_to_sentence()) |> 
+  knitr::kable() |> 
+  kable_styling()
+
+```

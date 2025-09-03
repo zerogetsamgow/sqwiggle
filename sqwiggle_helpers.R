@@ -66,3 +66,25 @@ sqwiggle_winner =
     
     return(winner)
   }
+
+team_colours = 
+  list(
+    "Adelaide Crows" = bv.sunshine,
+    "Brisbane Lions" = bv.red,
+    "Carlton" = bv.navy,      
+    "Collingwood" = bv.charcoal,      
+    "Essendon" = bv.black,        
+    "Fremantle" = bv.purple,         
+    "GWS GIANTS" = bv.orange,      
+    "Geelong Cats" = bv.navy,  
+    "Gold Coast SUNS" = bv.musk,
+    "Hawthorn"         = bv.maroon,  
+    "Melbourne"        = bv.navy,  
+    "North Melbourne"   = bv.cerulean, 
+    "Port Adelaide" = bv.teal,     
+    "Richmond" = bv.yellow,         
+    "St Kilda" = bv.smoke,           
+    "Sydney Swans" = bv.rose,       
+    "West Coast Eagles" = bv.royal ,
+    "Western Bulldogs" = bv.cobalt
+)

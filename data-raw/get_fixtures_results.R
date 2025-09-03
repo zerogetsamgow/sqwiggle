@@ -2,21 +2,20 @@
 library(tidyverse)
 library(fitzRoy)
 
-# Set cookie for getting round data
-my_cookie = fitzRoy::get_afl_cookie()
-
-fixture = 
+# Get and save fixture history if not already obtained.
+fixture_history = 
   tibble(
     "data" =
       pmap(
-        list(2022:2025),
+        list(2022:2024),
         fitzRoy::fetch_fixture,
         comp = "AFLW")
   ) |> 
   unnest(data) |> 
-  janitor::clean_names() |> 
-  select(-contains("abbreviation"), -contains("short"), -contains("type"), -contains("metadata")  )
+  janitor::clean_names() 
 
-completed = fixture |> filter(status == "CONCLUDED") 
-scheduled = fixture |> filter(status == "SCHEDULED") 
+arrow::write_parquet(fixture_history, sink = "./data/fixture_history.parquet")
+
+# completed = fixture |> filter(status == "CONCLUDED") 
+# scheduled = fixture |> filter(status == "SCHEDULED") 
 

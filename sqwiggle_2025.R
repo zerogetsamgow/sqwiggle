@@ -1,24 +1,24 @@
-home_game_advantage = 10
-carry_over = .8
-k_val = 10
-
-
-source("~/sqwiggle/data-raw/get_fixtures_results.R")
+source("~/sqwiggle/sqwiggle_helpers.R")
 
 # Extract pre-2025 fixtures to build starting model
-pre_2025 =
-  fixture |>
-  filter(!comp_season_year == 2025) |> 
+model_data =
+  arrow::read_parquet(file = "./data/fixture_history.parquet") |> 
+  # Add outcome variable using helper function
   mutate(
     sqwiggle_outcome = 
-      sqwigglize_margin(home_score_total_score - away_score_total_score))
+      sqwigglize_margin(home_score_total_score - away_score_total_score)) |> 
+  select(-contains("byes"))
 
-season_2025 = 
-  fixture |>
-  filter(comp_season_year == 2025)
+
 
 library(elo)
 
+# Set parameters for model
+home_game_advantage = 3
+carry_over = .2
+k_val = 25
+
+# Build model
 sqwiggle_elo_2025 = 
   elo.run(
     sqwiggle_outcome ~
@@ -27,19 +27,46 @@ sqwiggle_elo_2025 =
       regress(comp_season_name, 1500, carry_over) +
       group(round_provider_id),
     k = k_val,
-    data = pre_2025)
+    data = model_data)
 
-sqwiggle_tbl = 
-  sqwiggle_elo |> 
-  as_tibble()
+# Get current season data
+season_2025 = 
+  tibble(
+    "data" =
+      pmap(
+        list(2025),
+        fitzRoy::fetch_fixture,
+        comp = "AFLW")
+  ) |> 
+  unnest(data) |> 
+  janitor::clean_names()|> 
+  # Add outcome variable using helper function
+  mutate(
+    sqwiggle_outcome = 
+      sqwigglize_margin(home_score_total_score - away_score_total_score))
 
-start_2025_rankings = final.elos(sqwiggle_elo) |> enframe(name = "team_name") |> arrange(desc(value)) 
 
+
+
+# Create shells for round by round data
 tips_2025 = tibble()
 wins_2025 = tibble()
-sqwuiggles_2025 = tibble()
+sqwiggles_2025 = final.elos(sqwiggle_elo_2025) |>
+  enframe(name = "team_club_name") |> 
+  arrange(desc(value)) |> 
+  mutate(round_number = 0)
 
-for(.round in 1:3) {
+
+# Generate tips for season to date round by round
+
+last_round = 
+  season_2025 |>  
+  filter(status == "CONCLUDED") |> 
+  tail(1) |> 
+  pull(round_round_number)
+  
+
+for(.round in 1:last_round) {
   
   # Get data for current round
   round_data = season_2025 |> 
@@ -80,13 +107,10 @@ for(.round in 1:3) {
   wins_2025 = bind_rows(wins_2025, winner_tbl)
   
   #Update model to incorporate tipped round
-  round_sqwiggles = 
-    final.elos(sqwiggle_elo) |>
-    enframe(name = "team_name") |> 
-    arrange(desc(value)) |> 
-    mutate(round_round_number = .round)
-    
-  sqwiggles_2025 = bind_rows(sqwuiggles_2025,round_sqwiggles)  
+  model_data = bind_rows(model_data, round_data) |> 
+    mutate(
+      sqwiggle_outcome = 
+        sqwigglize_margin(home_score_total_score - away_score_total_score))
   
   sqwiggle_elo_2025 = 
     elo.run(
@@ -96,7 +120,15 @@ for(.round in 1:3) {
         regress(comp_season_name, 1500, carry_over) +
         group(round_provider_id),
       k = k_val,
-      data = bind_rows(pre_2025, round_data))
+      data = model_data)
+  
+  round_sqwiggles = 
+    final.elos(sqwiggle_elo_2025) |>
+    enframe(name = "team_club_name") |> 
+    arrange(desc(value)) |> 
+    mutate(round_number = .round)
+  
+  sqwiggles_2025 = bind_rows(sqwiggles_2025,round_sqwiggles)  
 }
 
 tipping_results =
@@ -111,7 +143,7 @@ tipping_results =
   
 # Get data for future rounds
 future_data = season_2025 |> 
-  filter(round_round_number > 3 )
+  filter(round_round_number > last_round )
   
   # Run predictions
   future_predict = 
@@ -132,15 +164,45 @@ future_data = season_2025 |>
       tips_2025,
       tip_tbl)
   
-  
-  predicted_ladder =
-    left_join(
+# Get actual ladder using fitZroy
+actual_ladder = 
+  fitzRoy::fetch_ladder(
+    season = 2025,
+    round_number = last_round,
+    comp = "AFLW",
+    source = "AFL"
+  ) |> 
+  janitor::clean_names() |>  
+  select(
+    team_club_name,
+    round_number,
+    "position_current" = position, 
+    "wins_current" = this_season_record_win_loss_record_wins)
+ 
+# Generate predicted ladder 
+predicted_ladder =
+  left_join(
       tips_2025,
       wins_2025) |> 
-    mutate(predicted_winner = coalesce(winner,tip)) |> 
-    group_by(predicted_winner) |> 
-    summarise(wins = n()) |> 
-    arrange(desc(wins))
-  
+    mutate(team_club_name = coalesce(winner,tip)) |> 
+    group_by(team_club_name) |> 
+    summarise(wins_predicted = n()) 
 
-   
+# Combine and format
+combined_ladder =
+  left_join(
+    actual_ladder,
+    predicted_ladder
+  ) |> 
+  arrange(desc(wins_predicted), position_current) |> 
+  mutate(position_predicted = 1:18) |> 
+  left_join(sqwiggles_2025) |> 
+  arrange(desc(value)) |> 
+  mutate(position_model = 1:18) |>
+  select(
+    team_club_name,
+    starts_with("wins"),
+    starts_with("position")
+  ) |> 
+  arrange(position_predicted) |> 
+  mutate(position_change =  position_current - position_predicted)
