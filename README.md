@@ -801,7 +801,7 @@ is based on past performance. Sqwiggle learns as each round is played.
 Sqwiggle’s estimate of each team’s ELO score after each round is shown
 below (round zero denotes the team’s end of 2024 score).
 
-![](README_files/figure-gfm/sqwiggle_wiggle-1.png)<!-- -->
+<img src="README_files/figure-gfm/sqwiggle_wiggle-1.png" width="2000" height="1000" />
 
 # How well does Sqwiggle go at tipping
 

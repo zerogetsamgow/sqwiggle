@@ -59,30 +59,46 @@ As an ELO model, Sqwiggle's assessment of teams and predictive ability is based 
 
 Sqwiggle's estimate of each team's ELO score after each round is shown below (round zero denotes the team's end of 2024 score).
 
-```{r sqwiggle_wiggle, echo=FALSE}
+```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1000}
 
 ggplot(
-   data = sqwiggles_2025,
-    aes(x = round_number, y = value, colour = team_club_name, label = team_club_name)
+   data = sqwiggles_2025 |> mutate(ymin =1500, xmin = 0),
+    aes(x = round_number, y = value, xmax = round_number, ymax = value, ymin = ymin, xmin = xmin, colour = team_club_name, label = team_club_name, fill = team_club_name)
   ) +
   geom_hline(
     yintercept = 1500, 
     colour = bv.charcoal, 
     linetype  = 2) +
   geom_line() +
-  ggrepel::geom_text_repel(
-    data = sqwiggles_2025 |> filter(round_number==3) |> 
-      mutate(round_number = round_number + .01),
-    hjust = 0,
-    size = 3,
-    direction = "y"
-  ) +
-  theme_vps_dh() +
-  scale_y_continuous(limits = c(1445,1585), name = "Sqwiggle score") +
-  scale_x_continuvps(breaks = 0L:18L, name = NULL, limits = c(0,3.8)) +
+  geom_ribbon(outline.type = "upper") +
+#  ggrepel::geom_text_repel(
+#    data = sqwiggles_2025 |> filter(round_number==3) |> 
+#      mutate(round_number = round_number + .01),
+#    hjust = 0,
+#    size = 3,
+#    direction = "y"
+ # ) +
+  theme_vps_dh(base_size = 7) +
+  facet_wrap(
+    facets = vars(team_club_name),
+    ncol = 6,
+    strip.position = "top") +
+  scale_y_continuous(
+    limits = c(1445,1585),
+    breaks = seq(1400,1600,by = 50),
+    name = "Sqwiggle score") +
+  scale_x_continuvps(
+    breaks = 1L:18L, 
+    name = NULL, limits = c(0,3.1)) +
  scale_colour_manual(values = unlist(team_colours))+
-  guides(colour = "none", ) +
-  theme(axis.line.x = element_blank())
+   scale_fill_manual(values = alpha(unlist(team_colours),.5))+
+  guides(colour = "none", fill = "none"
+           ) +
+  labs(caption = "Note: 1500 is the base score in Sqwiggle.")+
+  theme(
+    axis.line.x = element_blank(),
+    strip.placement = "inside"
+    )
 
 ```
 
