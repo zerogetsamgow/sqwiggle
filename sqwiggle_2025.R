@@ -10,7 +10,6 @@ model_data =
   select(-contains("byes"))
 
 
-
 library(elo)
 
 # Set parameters for model
@@ -36,7 +35,8 @@ season_2025 =
       pmap(
         list(2025),
         fitzRoy::fetch_fixture,
-        comp = "AFLW")
+        comp = "AFLW",
+        source = "AFL")
   ) |> 
   unnest(data) |> 
   janitor::clean_names()|> 
@@ -61,7 +61,7 @@ sqwiggles_2025 = final.elos(sqwiggle_elo_2025) |>
 
 last_round = 
   season_2025 |>  
-  filter(status == "CONCLUDED") |> 
+  filter(status %in% c("CONCLUDED")) |> 
   tail(1) |> 
   pull(round_round_number)
   

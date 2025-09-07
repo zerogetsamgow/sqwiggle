@@ -40,7 +40,7 @@ A key motivation for Sqwiggle was to better understand the state of play in the 
 
 -   Similarly, whether the current ladder is reflective of the likely finishing positions will depend on whether a team's draw to date has been stronger/weaker than its overall fixture.
 
-We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle. While both ladders have North Melbourne sitting on top undefeated, other teams shift position. For example, Geelong, who sit 16th and are winless, are predicted by Sqwiggle to win six of their remaining nine games and finish 9th. There current position reflects their opening three games including matches against North Melbourne and Adelaide (two of the top three teams based on the current Sqwiggle model) and Sydney (this year's biggest improver).
+We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle. While both ladders have North Melbourne sitting on top undefeated, other teams shift position. For example, West Coast, who sit 6th, are predicted by Sqwiggle to win two of their remaining eight games and finish 10th. 
 
 ```{r ladder_sqwiggle, echo=FALSE}
 
@@ -84,12 +84,12 @@ ggplot(
     ncol = 6,
     strip.position = "top") +
   scale_y_continuous(
-    limits = c(1445,1585),
+    limits = c(1445,1595),
     breaks = seq(1400,1600,by = 50),
     name = "Sqwiggle score") +
   scale_x_continuvps(
     breaks = 1L:18L, 
-    name = NULL, limits = c(0,3.1)) +
+    name = NULL, limits = c(0,last_round+.1)) +
  scale_colour_manual(values = unlist(team_colours))+
    scale_fill_manual(values = alpha(unlist(team_colours),.5))+
   guides(colour = "none", fill = "none"
@@ -120,14 +120,14 @@ tipping_results |>
 
 ```
 
-Sqwiggles tips for the next round are below.
+Sqwiggles tips for the next round are below. Sqwiggle continues to rate
 
 ```{r tipped_by_sqwiggle, echo=FALSE}
 
 tip_tbl |> 
   filter(round_round_number == (last_round+1L)) |> 
   rename_with(
-    \(x) str_replace_all(x,"round_|_|club_name", " ")
+    \(x) str_replace_all(x,"round_number|_|club_name", " ")
     |> str_to_sentence()) |> 
   knitr::kable() |> 
   kable_styling()
