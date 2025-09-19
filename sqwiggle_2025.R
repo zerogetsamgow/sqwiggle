@@ -6,16 +6,16 @@ model_data =
   # Add outcome variable using helper function
   mutate(
     sqwiggle_outcome = 
-      sqwigglize_margin(home_score_total_score - away_score_total_score)) |> 
+      sqwigglize_margin(home_score_total_score - away_score_total_score),
+    home_game_advantage = sqwigglize_hga(home_distance, away_distance)) |> 
   select(-contains("byes"))
 
 
 library(elo)
 
 # Set parameters for model
-home_game_advantage = 3
 carry_over = .2
-k_val = 25
+k_val = 40
 
 # Build model
 sqwiggle_elo_2025 = 
@@ -44,9 +44,24 @@ season_2025 =
   mutate(
     sqwiggle_outcome = 
       sqwigglize_margin(home_score_total_score - away_score_total_score))
+  
 
+team_distance =
+  arrow::read_parquet(file = "./data/team_distance.parquet") 
 
-
+season_2025 =
+  # Add home team distances
+  season_2025 |> 
+  left_join(
+    team_distance |> 
+      rename("home_team_club_name" = team_club_name,
+             "home_distance"= venue_distance)) |> 
+  left_join(
+    team_distance |> 
+      rename("away_team_club_name" = team_club_name,
+             "away_distance"= venue_distance)) |> 
+  mutate(home_game_advantage = sqwigglize_hga(home_distance, away_distance))
+  
 
 # Create shells for round by round data
 tips_2025 = tibble()
@@ -80,7 +95,7 @@ for(.round in 1:last_round) {
   # Convert to tips
   tip_tbl = 
     round_predict |> 
-    select(round_round_number, contains("club_name"), prediction) |>
+    select(round_round_number, contains("club_name"), prediction, home_game_advantage) |>
     mutate(margin_predicted = unsqwiggle_outcome(prediction),
            tip = sqwiggle_tip(.prediction = prediction,
                                home_team = home_team_club_name,

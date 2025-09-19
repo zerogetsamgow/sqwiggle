@@ -30,7 +30,7 @@ source("~/sqwiggle/sqwiggle_2025.R")
 
 <!-- badges: end -->
 
-Sqwiggle is a simple [ELO](https://cran.r-project.org/web/packages/fitzRoy/vignettes/elo-ratings-example.html) model for predicting [AFLW](https://www.afl.com.au/aflw) results built in R using the [fitzRoy](https://cran.r-project.org/web/packages/fitzRoy/index.html) and [elo](https://cran.r-project.org/web/packages/elo/index.html) packages. The name is derived from [Squiggle](https://squiggle.com.au/)
+Sqwiggle is a simple [ELO](https://cran.r-project.org/web/packages/fitzRoy/vignettes/elo-ratings-example.html) model for predicting [AFLW](https://www.afl.com.au/aflw) results built in R using the [fitzRoy](https://cran.r-project.org/web/packages/fitzRoy/index.html) and [elo](https://cran.r-project.org/web/packages/elo/index.html) packages. The name is derived from [Squiggle](https://squiggle.com.au/).
 
 ## A better ladder
 
@@ -40,7 +40,7 @@ A key motivation for Sqwiggle was to better understand the state of play in the 
 
 -   Similarly, whether the current ladder is reflective of the likely finishing positions will depend on whether a team's draw to date has been stronger/weaker than its overall fixture.
 
-We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle. While both ladders have North Melbourne sitting on top undefeated, other teams shift position. For example, West Coast, who sit 6th, are predicted by Sqwiggle to win two of their remaining eight games and finish 10th. 
+We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle. While both ladders have North Melbourne sitting on top undefeated, other teams shift position. For example, West Coast, who sit `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` are predicted by Sqwiggle to win `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |> pull(wins_predicted) - combined_ladder |> filter(str_detect(team_club_name, "Eagles")) |> pull(wins_current)` of their remaining games and finish `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
 
 ```{r ladder_sqwiggle, echo=FALSE}
 
@@ -55,7 +55,7 @@ combined_ladder |>
 
 ## Team strength
 
-As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. 
+As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle was also updated after round 4 to account for distance travelled when calculating home ground advantage. All data below is derived from this new model.
 
 Sqwiggle's estimate of each team's ELO score after each round is shown below (round zero denotes the team's end of 2024 score).
 
@@ -84,7 +84,7 @@ ggplot(
     ncol = 6,
     strip.position = "top") +
   scale_y_continuous(
-    limits = c(1445,1595),
+    limits = c(1430,1630),
     breaks = seq(1400,1600,by = 50),
     name = "Sqwiggle score") +
   scale_x_continuvps(

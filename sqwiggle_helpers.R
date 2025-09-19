@@ -20,6 +20,33 @@ sqwigglize_margin =
   return(norm)
   }
 
+#' Function to normalise AFLW margins to ELO outcomes
+#'
+#'
+#' @param home_distance home team's travel distance
+#' @param away_distance away team's travel distance
+#' @param adv_max the maximum distance advantage
+#' @param scale weighting applied to normalised advantage
+
+sqwigglize_hga =
+  function(
+    home_distance,
+    away_distance,
+    adv_max = 15, 
+    scale = 5) {
+    
+    hga = away_distance - home_distance
+    
+    norm = hga  / adv_max
+    norm = norm |> 
+      pmin(1) |> 
+      pmax(0)
+    
+    norm = norm * scale
+    
+    return(norm)
+  }
+
 #' Function to convert AFLW ELO outcomes to margins
 #'
 #'
@@ -67,6 +94,8 @@ sqwiggle_winner =
     return(winner)
   }
 
+
+library(vpstheme)
 team_colours = 
   list(
     "Adelaide Crows" = bv.sunshine,
