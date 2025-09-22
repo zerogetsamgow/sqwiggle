@@ -120,7 +120,7 @@ tipping_results |>
 
 ```
 
-Sqwiggles tips for the next round are below. Sqwiggle continues to rate
+Sqwiggles tips for the next round are below.
 
 ```{r tipped_by_sqwiggle, echo=FALSE}
 
