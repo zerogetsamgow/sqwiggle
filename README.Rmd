@@ -40,12 +40,14 @@ A key motivation for Sqwiggle was to better understand the state of play in the 
 
 -   Similarly, whether the current ladder is reflective of the likely finishing positions will depend on whether a team's draw to date has been stronger/weaker than its overall fixture.
 
-We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle. While both ladders have North Melbourne sitting on top undefeated, other teams shift position. For example, West Coast, who sit `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` are predicted by Sqwiggle to win `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |> pull(wins_predicted) - combined_ladder |> filter(str_detect(team_club_name, "Eagles")) |> pull(wins_current)` of their remaining games and finish `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
+We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle. While both ladders have North Melbourne sitting on top undefeated, other teams shift position. 
+-  West Coast, who sit `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` are predicted by Sqwiggle to win `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |> pull(wins_predicted) - combined_ladder |> filter(str_detect(team_club_name, "Eagles")) |> pull(wins_current)` of their remaining games and finish `r combined_ladder |> filter(str_detect(team_club_name,"Eagles")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
+-  Hawthorn, who sit `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` and are predicted to hold that position benefit from upsetting Brisbane in the opening round and a weaker draw as Sqwiggle only ranks them as the `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_model) |>  toOrdinal::toOrdinal()` best team.
 
 ```{r ladder_sqwiggle, echo=FALSE}
 
 combined_ladder |>
-  rename_with(\(x) str_replace(x,"_", " ") |> str_to_sentence()) |> 
+  rename_with(\(x) str_replace_all(x,"_|club", " ") |> str_to_sentence()) |> 
   knitr::kable() |> 
    kable_styling()  |> 
    row_spec(1:8, background = bv.crystal) |> 
@@ -61,9 +63,19 @@ Sqwiggle's estimate of each team's ELO score after each round is shown below (ro
 
 ```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1000}
 
-ggplot(
-   data = sqwiggles_2025 |> mutate(ymin =1500, xmin = 0),
-    aes(x = round_number, y = value, xmax = round_number, ymax = value, ymin = ymin, xmin = xmin, colour = team_club_name, label = team_club_name, fill = team_club_name)
+suppressWarnings(
+  ggplot(
+    data = sqwiggles_2025 |> mutate(ymin = 1500, xmin = 0),
+    aes(
+      x = round_number, 
+      y = value, 
+      xmax = round_number, 
+      ymax = value, 
+      ymin = ymin, 
+      xmin = xmin, 
+      colour = team_club_name, 
+      label = team_club_name, 
+      fill = team_club_name)
   ) +
   geom_hline(
     yintercept = 1500, 
@@ -84,25 +96,27 @@ ggplot(
     ncol = 6,
     strip.position = "top") +
   scale_y_continuous(
-    limits = c(1430,1630),
+    limits = c(1420,1630),
     breaks = seq(1400,1600,by = 50),
     name = "Sqwiggle score") +
   scale_x_continuvps(
     breaks = 1L:18L, 
     name = NULL, limits = c(0,last_round+.1)) +
- scale_colour_manual(values = unlist(team_colours))+
-   scale_fill_manual(values = alpha(unlist(team_colours),.5))+
-  guides(colour = "none", fill = "none"
-           ) +
-  labs(caption = "Note: 1500 is the base score in Sqwiggle.")+
+  scale_colour_manual(
+   values = unlist(team_colours))+
+  scale_fill_manual(
+    values = alpha(unlist(team_colours),.5))+
+  guides(
+    colour = "none", fill = "none") +
+  labs(
+    caption = "Note: 1500 is the base score in Sqwiggle.")+
   theme(
     axis.line.x = element_blank(),
-    strip.placement = "inside"
-    )
-
+    strip.placement = "inside")
+)
 ```
 
-# How well does Sqwiggle go at tipping
+## How well does Sqwiggle go at tipping
 
 Sqwiggle's tipping performance for 2025 is summarised below. Not bad, not great.
 
@@ -113,7 +127,7 @@ tipping_results |>
   summarise(correct = sum(correct), games = n()) |> 
   mutate(cumulative = cumsum(correct)) |> 
   rename_with(
-    \(x) str_replace_all(x,"round_|_", " ")
+    \(x) str_replace_all(x,"round_|_|club_name", " ")
     |> str_to_sentence()) |> 
   knitr::kable() |> 
    kable_styling() 
