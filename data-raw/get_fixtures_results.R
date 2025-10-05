@@ -94,6 +94,7 @@ fixture_history =
     team_distance |> 
       rename("home_team_club_name" = team_club_name,
              "home_distance"= venue_distance)) |> 
+  # Add away distance
   left_join(
     team_distance |> 
       rename("away_team_club_name" = team_club_name,

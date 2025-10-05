@@ -43,7 +43,7 @@ season_2025 =
   # Add outcome variable using helper function
   mutate(
     sqwiggle_outcome = 
-      sqwigglize_margin(home_score_total_score - away_score_total_score))
+      sqwigglize_margin(home_score_total_score - away_score_total_score)) 
   
 
 team_distance =
@@ -96,8 +96,8 @@ for(.round in 1:last_round) {
   tip_tbl = 
     round_predict |> 
     select(round_round_number, contains("club_name"), prediction, home_game_advantage) |>
-    mutate(margin_predicted = unsqwiggle_outcome(prediction),
-           tip = sqwiggle_tip(.prediction = prediction,
+    mutate(margin_predicted = unsqwiggle_outcome(prediction)+home_game_advantage,
+           tip = sqwiggle_tip(.margin = margin_predicted ,
                                home_team = home_team_club_name,
                                away_team = away_team_club_name))
   
@@ -168,9 +168,9 @@ future_data = season_2025 |>
   # Convert to tips
   tip_tbl = 
     future_predict |> 
-    select(round_round_number, contains("club_name"), prediction) |>
-    mutate(margin_predicted = unsqwiggle_outcome(prediction),
-           tip = sqwiggle_tip(.prediction = prediction,
+    select(round_round_number, contains("club_name"), prediction, home_game_advantage) |>
+    mutate(margin_predicted = unsqwiggle_outcome(prediction)+home_game_advantage,
+           tip = sqwiggle_tip(.margin = margin_predicted,
                               home_team = home_team_club_name,
                               away_team = away_team_club_name))
   

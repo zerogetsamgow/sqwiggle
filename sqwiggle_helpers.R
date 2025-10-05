@@ -63,12 +63,12 @@ unsqwiggle_outcome =
 
 sqwiggle_tip =
   function(
-    .prediction = prediction,
+    .margin = margin,
     home_team = home_team_club_name,
     away_team = away_team_club_name) {
     
     tip = if_else(
-      .prediction >= .5,
+      .margin >= 0,
       home_team, 
       away_team
     )
