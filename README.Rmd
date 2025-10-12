@@ -142,6 +142,7 @@ Sqwiggles tips for the next round are below.
 
 tip_tbl |> 
   filter(round_round_number == (last_round+1L)) |> 
+  mutate(home_game_advantage=round(home_game_advantage)) |> 
   rename_with(
     \(x) str_replace_all(x,"round_number|_|club_name", " ")
     |> str_to_sentence()) |> 

@@ -78,15 +78,15 @@ sqwiggle_tip =
 
 sqwiggle_winner =
   function(
-    .outcome = sqwiggle_outcome,
+    .margin = margin,
     home_team = home_team_club_name,
     away_team = away_team_club_name) {
     
     winner = if_else(
-      .outcome > .5,
+      .margin > 0,
       home_team, 
       if_else(
-        .outcome  == .5,
+        .margin  == 0,
         "Draw",
         away_team)
     )

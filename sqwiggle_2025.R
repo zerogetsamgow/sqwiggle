@@ -110,11 +110,10 @@ for(.round in 1:last_round) {
   winner_tbl = 
     round_predict |> 
     mutate(
-      sqwiggle_outcome = 
-        sqwigglize_margin(home_score_total_score - away_score_total_score),
+      margin = home_score_total_score - away_score_total_score,
       winner = 
         sqwiggle_winner(
-          .outcome = sqwiggle_outcome,
+          .margin = margin,
           home_team = home_team_club_name,
           away_team = away_team_club_name)) |> 
     select(round_round_number, contains("club_name"), winner)
@@ -169,7 +168,7 @@ future_data = season_2025 |>
   tip_tbl = 
     future_predict |> 
     select(round_round_number, contains("club_name"), prediction, home_game_advantage) |>
-    mutate(margin_predicted = unsqwiggle_outcome(prediction)+home_game_advantage,
+    mutate(margin_predicted = round(unsqwiggle_outcome(prediction)+home_game_advantage,0),
            tip = sqwiggle_tip(.margin = margin_predicted,
                               home_team = home_team_club_name,
                               away_team = away_team_club_name))

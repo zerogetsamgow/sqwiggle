@@ -1138,12 +1138,12 @@ Hawthorn
 
 <td style="text-align:right;">
 
-2.428128
+2
 </td>
 
 <td style="text-align:right;">
 
--1.571872
+-2
 </td>
 
 <td style="text-align:left;">
@@ -1177,12 +1177,12 @@ Geelong Cats
 
 <td style="text-align:right;">
 
-5.000000
+5
 </td>
 
 <td style="text-align:right;">
 
-0.000000
+0
 </td>
 
 <td style="text-align:left;">
@@ -1216,12 +1216,12 @@ Sydney Swans
 
 <td style="text-align:right;">
 
-2.460834
+2
 </td>
 
 <td style="text-align:right;">
 
-11.460834
+11
 </td>
 
 <td style="text-align:left;">
@@ -1255,12 +1255,12 @@ Adelaide Crows
 
 <td style="text-align:right;">
 
-2.328638
+2
 </td>
 
 <td style="text-align:right;">
 
-14.328638
+14
 </td>
 
 <td style="text-align:left;">
@@ -1294,12 +1294,12 @@ Fremantle
 
 <td style="text-align:right;">
 
-5.000000
+5
 </td>
 
 <td style="text-align:right;">
 
--1.000000
+-1
 </td>
 
 <td style="text-align:left;">
@@ -1333,12 +1333,12 @@ St Kilda
 
 <td style="text-align:right;">
 
-0.000000
+0
 </td>
 
 <td style="text-align:right;">
 
--2.000000
+-2
 </td>
 
 <td style="text-align:left;">
@@ -1372,12 +1372,12 @@ Brisbane Lions
 
 <td style="text-align:right;">
 
-4.279477
+4
 </td>
 
 <td style="text-align:right;">
 
--7.720523
+-8
 </td>
 
 <td style="text-align:left;">
@@ -1411,12 +1411,12 @@ Richmond
 
 <td style="text-align:right;">
 
-0.000000
+0
 </td>
 
 <td style="text-align:right;">
 
--6.000000
+-6
 </td>
 
 <td style="text-align:left;">
@@ -1450,12 +1450,12 @@ Western Bulldogs
 
 <td style="text-align:right;">
 
-3.059681
+3
 </td>
 
 <td style="text-align:right;">
 
--4.940319
+-5
 </td>
 
 <td style="text-align:left;">
