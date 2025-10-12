@@ -12,12 +12,12 @@ sqwigglize_margin =
     range_max = 100, 
     range_min = -100) {
   
-  norm = (margin -  range_min) / (range_max -  range_min)
-  norm = norm |> 
+  norm_margin = (margin -  range_min) / (range_max -  range_min)
+  norm_margin = norm_margin |> 
     pmin(1) |> 
     pmax(0)
   
-  return(norm)
+  return(norm_margin)
   }
 
 #' Function to normalise AFLW margins to ELO outcomes
@@ -37,14 +37,14 @@ sqwigglize_hga =
     
     hga = away_distance - home_distance
     
-    norm = hga  / adv_max
-    norm = norm |> 
+    norm_hga = hga  / adv_max
+    norm_hga = norm_hga |> 
       pmin(1) |> 
       pmax(0)
     
-    norm = norm * scale
+    norm_hga = norm_hga * scale
     
-    return(norm)
+    return(norm_hga)
   }
 
 #' Function to convert AFLW ELO outcomes to margins
