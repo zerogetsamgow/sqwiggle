@@ -44,7 +44,10 @@ We can see this reflected in the table below, which shows data from the current 
 
 \- GWS, who sit `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` are predicted by Sqwiggle to win `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |> pull(wins_predicted) - combined_ladder |> filter(str_detect(team_club_name, "GWS")) |> pull(wins_current)` of their remaining games and finish `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
 
-\- Hawthorn, who sit `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` and are predicted to hold that position benefit from upsetting Brisbane in the opening round and a weaker draw as Sqwiggle only ranks them as the `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_model) |>  toOrdinal::toOrdinal()` best team.
+\- Hawthorn, who sit `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` and are predicted to hold that position benefit from upsetting Brisbane in the opening round and a weaker draw (opposition strength of `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(opposition_strength)`) as Sqwiggle only ranks them as the `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_model) |>  toOrdinal::toOrdinal()` best team.
+
+\- Port Adelaide are predicted to finish `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()` even though Sqwiggle ranks them as the `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(position_model) |>  toOrdinal::toOrdinal()` best team as they have the toughest draw (opposition strength of `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(opposition_strength)`).
+
 
 ```{r ladder_sqwiggle, echo=FALSE}
 
@@ -56,6 +59,8 @@ combined_ladder |>
    row_spec(9:18, background = bv.white)
 
 ```
+*Roo test denotes a team plays North Melbourne - the highest ranked team and prediced to be undefeated. Notably, Hawthorn has the second lowest opposition strength score despite playing North Melbourne.
+
 
 ## Team strength
 
@@ -98,7 +103,7 @@ suppressWarnings(
     ncol = 6,
     strip.position = "top") +
   scale_y_continuous(
-    limits = c(1420,1630),
+    limits = c(1410,1630),
     breaks = seq(1400,1600,by = 50),
     name = "Sqwiggle score") +
   scale_x_continuvps(
@@ -120,7 +125,7 @@ suppressWarnings(
 
 ## How well does Sqwiggle go at tipping
 
-Sqwiggle's tipping performance for 2025 is summarised below. Not bad, not great.
+Sqwiggle's tipping performance for 2025 is summarised below. As of round `r last_round` it would be leading [The Age's expert tips competition](https://www.theage.com.au/sport/afl/aflw-expert-tips-20250814-p5mn1s.html) and would be top ten in [ESPN's footy tips competition](https://www.footytips.com.au/competitions/aflw/ladders?view=ladderScores&season=747&competitionId=706852)
 
 ```{r summarise_sqwiggle, echo=FALSE}
 

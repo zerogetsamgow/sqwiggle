@@ -153,6 +153,43 @@ tipping_results =
   group_by(round_round_number) |> 
   mutate(round_score = sum(correct))
 
+# Calculate opponent strength
+
+opponents = 
+  season_2025 |> 
+  select(id, round_round_number, contains("team_club_name")) |> 
+  pivot_longer(contains("team_club_name"), values_to = "team") 
+
+
+oppo_strength = 
+  opponents |> 
+  left_join(
+    opponents |> rename("opponent"="team"),
+    by = join_by("id", "round_round_number")
+  ) |> 
+  filter(
+    team!=opponent
+  ) |> 
+  select(
+    "round_number" = round_round_number, team, opponent
+  ) |> 
+  left_join(
+    sqwiggles_2025 |> 
+      mutate(round_number = round_number + 1) |> 
+      rename("opponent" = team_club_name),
+    by = join_by("round_number", "opponent")
+  ) |> 
+  group_by(
+    team
+  ) |> 
+  arrange(team, round_number) |> 
+  fill(value) |> 
+  filter(!is.na(value)) |> 
+  summarise(
+    total = sum(value)/n(),
+    roo_test = any(opponent == "North Melbourne")
+  )
+
 
   
 # Get data for future rounds
@@ -219,4 +256,7 @@ combined_ladder =
     starts_with("position")
   ) |> 
   arrange(position_predicted) |> 
-  mutate(position_change =  position_current - position_predicted)
+  mutate(position_change =  position_current - position_predicted) |> 
+  left_join(
+    oppo_strength |> rename("team_club_name" = team, "opposition_strength" = total)
+  )
