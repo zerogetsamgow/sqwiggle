@@ -9,6 +9,18 @@
     ]
   },
   "Packages": {
+    "arrow": {
+      "Package": "arrow",
+      "Version": "21.0.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "askpass": {
+      "Package": "askpass",
+      "Version": "1.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
     "geomtextpath": {
       "Package": "geomtextpath",
       "Version": "0.2.0",
@@ -69,9 +81,81 @@
       "Maintainer": "Kevin Ushey <kevin@rstudio.com>",
       "Repository": "CRAN"
     },
+    "stringdist": {
+      "Package": "stringdist",
+      "Version": "0.9.15",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "stringr": {
+      "Package": "stringr",
+      "Version": "1.5.2",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
     "tidyverse": {
       "Package": "tidyverse",
       "Version": "2.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "uuid": {
+      "Package": "uuid",
+      "Version": "1.2-1",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "vctrs": {
+      "Package": "vctrs",
+      "Version": "0.6.5",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "viridisLite": {
+      "Package": "viridisLite",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "vroom": {
+      "Package": "vroom",
+      "Version": "1.6.6",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "waldo": {
+      "Package": "waldo",
+      "Version": "0.6.2",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "withr": {
+      "Package": "withr",
+      "Version": "3.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "wk": {
+      "Package": "wk",
+      "Version": "0.9.4",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "xfun": {
+      "Package": "xfun",
+      "Version": "0.53",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "xml2": {
+      "Package": "xml2",
+      "Version": "1.4.0",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "xtable": {
+      "Package": "xtable",
+      "Version": "1.8-4",
       "Source": "Repository",
       "Repository": "CRAN"
     },
