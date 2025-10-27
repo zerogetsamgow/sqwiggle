@@ -19,6 +19,8 @@ library(kableExtra)
 ```{r update_sqwiggle, include=FALSE}
 
 source("~/sqwiggle/sqwiggle_2025.R")
+source("~/sqwiggle/generate_tips.R")
+source("~/sqwiggle/build_ladder.R")
 
 ```
 
