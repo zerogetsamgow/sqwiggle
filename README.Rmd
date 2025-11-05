@@ -42,13 +42,13 @@ A key motivation for Sqwiggle was to better understand the state of play in the 
 
 -   Similarly, whether the current ladder is reflective of the likely finishing positions will depend on whether a team's draw to date has been stronger/weaker than its overall fixture.
 
-We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle. While both ladders have North Melbourne sitting on top undefeated, other teams shift position.
+We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle created prior to round 1. While both ladders have North Melbourne sitting on top undefeated, other teams shift position.
 
-\- GWS, who sit `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` are predicted by Sqwiggle to win `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |> pull(wins_predicted) - combined_ladder |> filter(str_detect(team_club_name, "GWS")) |> pull(wins_current)` of their remaining games and finish `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
+\- Carlton, finished `r combined_ladder |> filter(str_detect(team_club_name,"Carlton")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` were only projected to finish `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
 
-\- Hawthorn, who sit `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` and are predicted to hold that position benefit from upsetting Brisbane in the opening round and a weaker draw (opposition strength of `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(opposition_strength)`) as Sqwiggle only ranks them as the `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_model) |>  toOrdinal::toOrdinal()` best team.
+\- Hawthorn, who finished `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` were predicted to finish`r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()` but benefitted from upsetting Brisbane in the opening round `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(opposition_strength)`).
 
-\- Port Adelaide are predicted to finish `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()` even though Sqwiggle ranks them as the `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(position_model) |>  toOrdinal::toOrdinal()` best team as they have the toughest draw (opposition strength of `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(opposition_strength)`).
+\- Port Adelaide were predicted to finish `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()` even though Sqwiggle ranks them as the `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(position_model) |>  toOrdinal::toOrdinal()` best team as they have the toughest draw (opposition strength of `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(opposition_strength)`).
 
 
 ```{r ladder_sqwiggle, echo=FALSE}
@@ -105,7 +105,7 @@ suppressWarnings(
     ncol = 6,
     strip.position = "top") +
   scale_y_continuous(
-    limits = c(1410,1630),
+    limits = c(1410,1640),
     breaks = seq(1400,1600,by = 50),
     name = "Sqwiggle score") +
   scale_x_continuvps(
@@ -125,9 +125,9 @@ suppressWarnings(
 )
 ```
 
-## How well does Sqwiggle go at tipping
+## How well did Sqwiggle go at tipping in 2025
 
-Sqwiggle's tipping performance for 2025 is summarised below. As of round `r last_round` it would be leading [The Age's expert tips competition](https://www.theage.com.au/sport/afl/aflw-expert-tips-20250814-p5mn1s.html) and would be top ten in [ESPN's footy tips competition](https://www.footytips.com.au/competitions/aflw/ladders?view=ladderScores&season=747&competitionId=706852)
+Sqwiggle's tipping performance for 2025 is summarised below. Sqwiggle would have won [The Age's expert tips competition](https://www.theage.com.au/sport/afl/aflw-expert-tips-20250814-p5mn1s.html) and finished top ten in [ESPN's footy tips competition](https://www.footytips.com.au/competitions/aflw/ladders?view=ladderScores&season=747&competitionId=706852)
 
 ```{r summarise_sqwiggle, echo=FALSE}
 
@@ -143,7 +143,7 @@ tipping_results |>
 
 ```
 
-Sqwiggles tips for the next round are below.
+Sqwiggles tips for the first week of finals are below.
 
 ```{r tipped_by_sqwiggle, echo=FALSE}
 

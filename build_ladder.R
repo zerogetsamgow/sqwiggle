@@ -3,6 +3,7 @@
 opponents = 
   season_2025 |> 
   select(id, round_round_number, contains("team_club_name")) |> 
+  filter(round_round_number<13) |> 
   pivot_longer(contains("team_club_name"), values_to = "team") 
 
 oppo_strength = 
@@ -53,13 +54,10 @@ actual_ladder =
 
 # Generate predicted ladder 
 predicted_ladder =
-  left_join(
-    tips_2025,
-    wins_2025
-   ) |> 
-  mutate(team_club_name = coalesce(winner,tip)) |> 
+  start_tip_tbl |> 
+  mutate(team_club_name = tip) |> 
   group_by(team_club_name) |> 
-  summarise(wins_predicted = n()) 
+  summarise(wins_predicted = n())
 
 
 average_score = season_2025 |> 
@@ -68,8 +66,7 @@ average_score = season_2025 |>
   summarise(value = mean(value, na.rm = TRUE))
 
 percentage_adjustment = 
-  tips_2025 |> 
-  filter(round_round_number > last_round) |> 
+  start_tip_tbl |> 
   select(contains("team"),margin_predicted) |> 
   pivot_longer(contains("team"), values_to = "team_club_name", names_transform = \(x) str_remove(x, "_team.*")) |> 
   mutate(adjustment_sign = if_else(name == "home",1,-1),
@@ -83,6 +80,7 @@ combined_ladder =
     actual_ladder,
     predicted_ladder
   ) |> 
+  mutate(wins_predicted = pmax(wins_predicted,0, na.rm = TRUE)) |> 
   left_join(percentage_adjustment) |> 
   mutate(percentage = (points_for+adjustment)/points_against*100) |> 
   arrange(desc(wins_predicted), desc(percentage)) |> 
@@ -95,8 +93,8 @@ combined_ladder =
     starts_with("wins"),
     starts_with("position")
   ) |> 
-  arrange(position_predicted) |> 
-  mutate(position_change =  position_current - position_predicted) |> 
+  arrange(position_current) |> 
+  mutate(position_change =  position_predicted - position_current) |> 
   left_join(
     oppo_strength |> rename("team_club_name" = team, "opposition_strength" = total)
   )

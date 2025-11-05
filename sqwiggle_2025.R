@@ -62,14 +62,31 @@ season_2025 =
              "away_distance"= venue_distance)) |> 
   mutate(home_game_advantage = sqwigglize_hga(home_distance, away_distance))
   
+# Generate start of season tips
+start_predict = 
+  season_2025 |> filter(round_round_number < 13) |> 
+  mutate(prediction = predict(sqwiggle_elo_2025, newdata = season_2025 |> filter(round_round_number < 13)))
+
+start_tip_tbl =
+  start_predict|> 
+  select(round_round_number, contains("club_name"), prediction, home_game_advantage) |>
+  mutate(margin_predicted = round(unsqwiggle_outcome(prediction)+home_game_advantage,0),
+         tip = sqwiggle_tip(.margin = margin_predicted ,
+                            home_team = home_team_club_name,
+                            away_team = away_team_club_name))
+
 
 # Create shells for round by round data
 tips_2025 = tibble()
 wins_2025 = tibble()
+
 sqwiggles_2025 = final.elos(sqwiggle_elo_2025) |>
   enframe(name = "team_club_name") |> 
   arrange(desc(value)) |> 
   mutate(round_number = 0)
+
+
+
 
 
 # Generate tips for season to date round by round
