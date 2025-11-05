@@ -24,7 +24,7 @@ source("~/sqwiggle/build_ladder.R")
 
 ```
 
-# Sqwiggle
+# Sqwiggle 
 
 ## Introduction
 
@@ -44,7 +44,7 @@ A key motivation for Sqwiggle was to better understand the state of play in the 
 
 We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle created prior to round 1. While both ladders have North Melbourne sitting on top undefeated, other teams shift position.
 
-\- Carlton, finished `r combined_ladder |> filter(str_detect(team_club_name,"Carlton")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` were only projected to finish `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
+\- Carlton finished `r combined_ladder |> filter(str_detect(team_club_name,"Carlton")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` but were only projected to finish `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
 
 \- Hawthorn, who finished `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` were predicted to finish`r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()` but benefitted from upsetting Brisbane in the opening round `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(opposition_strength)`).
 

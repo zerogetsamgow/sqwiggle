@@ -35,8 +35,7 @@ current ladder and a predicted end-of-season ladder based on Sqwiggle
 created prior to round 1. While both ladders have North Melbourne
 sitting on top undefeated, other teams shift position.
 
-\- GWS, who sit 17th are predicted by Sqwiggle to win -2 of their
-remaining games and finish 18th.
+\- Carlton finished 5th but were only projected to finish 18th.
 
 \- Hawthorn, who finished 4th were predicted to finish6th but benefitted
 from upsetting Brisbane in the opening round 1501.7702033).
