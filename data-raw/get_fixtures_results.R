@@ -199,7 +199,7 @@ fixture_history_m =
              "away_distance"= venue_distance)) |> 
   as_tibble() |>  
   select(-contains("byes")) |> 
-  filter(comp_season_id != max(comp_season_id))
+  filter(comp_season_id != 85)
 
 
 

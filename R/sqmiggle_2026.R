@@ -13,9 +13,9 @@ model_data_m =
 library(elo)
 
 # Set parameters for model
-carry_over = .4
+carry_over = .3
 
-k_val = 50
+k_val = 40
 
 # Build model
 sqmiggle_elo_2026 = 
