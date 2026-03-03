@@ -17,11 +17,7 @@ library(kableExtra)
 ```
 
 ```{r update_sqwiggle, include=FALSE}
-
-source("~/sqwiggle/sqwiggle_2025.R")
-source("~/sqwiggle/generate_tips.R")
-source("~/sqwiggle/build_ladder.R")
-
+source("./r/sqmiggle_2026.R")
 ```
 
 # Sqwiggle 
@@ -32,23 +28,15 @@ source("~/sqwiggle/build_ladder.R")
 
 <!-- badges: end -->
 
-Sqwiggle is a simple [ELO](https://cran.r-project.org/web/packages/fitzRoy/vignettes/elo-ratings-example.html) model for predicting [AFLW](https://www.afl.com.au/aflw) results built in R using the [fitzRoy](https://cran.r-project.org/web/packages/fitzRoy/index.html) and [elo](https://cran.r-project.org/web/packages/elo/index.html) packages. The name is derived from [Squiggle](https://squiggle.com.au/).
+Sqwiggle is a simple [ELO](https://cran.r-project.org/web/packages/fitzRoy/vignettes/elo-ratings-example.html) model for predicting [AFLW](https://www.afl.com.au/aflw) and [AFLM](https://www.afl.com.au)results built in R using the [fitzRoy](https://cran.r-project.org/web/packages/fitzRoy/index.html) and [elo](https://cran.r-project.org/web/packages/elo/index.html) packages. The name is derived from [Squiggle](https://squiggle.com.au/).
 
 ## A better ladder
 
 A key motivation for Sqwiggle was to better understand the state of play in the AFLW, which is an uneven competition with a compromised fixture.
 
--   As the eighteen teams in the AFLW only play 12 games, whether a team is drawn against stronger or weaker opponents will be critical in determining the final ladder.
+Sqwiggle's tipping performance for AFLW 2025 was admirable. Sqwiggle would have won [The Age's expert tips competition](https://www.theage.com.au/sport/afl/aflw-expert-tips-20250814-p5mn1s.html) and finished top ten in [ESPN's footy tips competition](https://www.footytips.com.au/competitions/aflw/ladders?view=ladderScores&season=747&competitionId=706852).
 
--   Similarly, whether the current ladder is reflective of the likely finishing positions will depend on whether a team's draw to date has been stronger/weaker than its overall fixture.
-
-We can see this reflected in the table below, which shows data from the current ladder and a predicted end-of-season ladder based on Sqwiggle created prior to round 1. While both ladders have North Melbourne sitting on top undefeated, other teams shift position.
-
-\- Carlton finished `r combined_ladder |> filter(str_detect(team_club_name,"Carlton")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` but were only projected to finish `r combined_ladder |> filter(str_detect(team_club_name,"GWS")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()`.
-
-\- Hawthorn, who finished `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_current) |>  toOrdinal::toOrdinal()` were predicted to finish`r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()` but benefitted from upsetting Brisbane in the opening round `r combined_ladder |> filter(str_detect(team_club_name,"Hawthorn")) |>  pull(opposition_strength)`).
-
-\- Port Adelaide were predicted to finish `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(position_predicted) |>  toOrdinal::toOrdinal()` even though Sqwiggle ranks them as the `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(position_model) |>  toOrdinal::toOrdinal()` best team as they have the toughest draw (opposition strength of `r combined_ladder |> filter(str_detect(team_club_name,"Port")) |>  pull(opposition_strength)`).
+For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder before opening round is below.
 
 
 ```{r ladder_sqwiggle, echo=FALSE}
@@ -61,20 +49,19 @@ combined_ladder |>
    row_spec(9:18, background = bv.white)
 
 ```
-*Roo test denotes a team plays North Melbourne - the highest ranked team and prediced to be undefeated. Notably, Hawthorn has the second lowest opposition strength score despite playing North Melbourne.
 
 
 ## Team strength
 
-As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle was also updated after round 4 to account for distance travelled when calculating home ground advantage. All data below is derived from this new model.
+As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle accounts for distance travelled when calculating home ground advantage. 
 
-Sqwiggle's estimate of each team's ELO score after each round is shown below (round zero denotes the team's end of 2024 score).
+Sqwiggle's estimate of each team's ELO score at the start of the season is shown below.
 
 ```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1000}
 
 suppressWarnings(
   ggplot(
-    data = sqwiggles_2025 |> mutate(ymin = 1500, xmin = 0),
+    data = sqmiggles_2026 |> mutate(ymin = 1500, xmin = 0),
     aes(
       x = round_number, 
       y = value, 
@@ -83,6 +70,7 @@ suppressWarnings(
       ymin = ymin, 
       xmin = xmin, 
       colour = team_club_name, 
+      group = team_club_name,
       label = team_club_name, 
       fill = team_club_name)
   ) +
@@ -92,25 +80,18 @@ suppressWarnings(
     linetype  = 2) +
   geom_line() +
   geom_ribbon(outline.type = "upper") +
-#  ggrepel::geom_text_repel(
-#    data = sqwiggles_2025 |> filter(round_number==3) |> 
-#      mutate(round_number = round_number + .01),
-#    hjust = 0,
-#    size = 3,
-#    direction = "y"
- # ) +
   theme_vps_dh(base_size = 7) +
   facet_wrap(
     facets = vars(team_club_name),
     ncol = 6,
     strip.position = "top") +
   scale_y_continuous(
-    limits = c(1410,1640),
-    breaks = seq(1400,1600,by = 50),
+    limits = c(1340,1610),
+    breaks = seq(1300,1600,by = 50),
     name = "Sqwiggle score") +
   scale_x_continuvps(
     breaks = 1L:18L, 
-    name = NULL, limits = c(0,last_round+.1)) +
+    name = NULL, limits = c(-1.1,last_round+.7)) +
   scale_colour_manual(
    values = unlist(team_colours))+
   scale_fill_manual(
@@ -125,9 +106,9 @@ suppressWarnings(
 )
 ```
 
-## How well did Sqwiggle go at tipping in 2025
+## How well did Sqwiggle go at tipping the AFLM in 2026
 
-Sqwiggle's tipping performance for 2025 is summarised below. Sqwiggle would have won [The Age's expert tips competition](https://www.theage.com.au/sport/afl/aflw-expert-tips-20250814-p5mn1s.html) and finished top ten in [ESPN's footy tips competition](https://www.footytips.com.au/competitions/aflw/ladders?view=ladderScores&season=747&competitionId=706852)
+Keep track of tipping performance here as the season progresses.
 
 ```{r summarise_sqwiggle, echo=FALSE}
 
@@ -135,6 +116,7 @@ tipping_results |>
   group_by(round_round_number) |> 
   summarise(correct = sum(correct), games = n()) |> 
   mutate(cumulative = cumsum(correct)) |> 
+  filter(round_round_number <= last_round) |> 
   rename_with(
     \(x) str_replace_all(x,"round_|_|club_name", " ")
     |> str_to_sentence()) |> 
@@ -143,12 +125,12 @@ tipping_results |>
 
 ```
 
-Sqwiggles tips for the first week of finals are below.
+Sqwiggles tips for the next round are below.
 
 ```{r tipped_by_sqwiggle, echo=FALSE}
 
-tip_tbl |> 
-  filter(round_round_number == (last_round+1L)) |> 
+tips_2026_m |> 
+  filter(round_round_number == (last_round)) |> 
   mutate(home_game_advantage=round(home_game_advantage)) |> 
   rename_with(
     \(x) str_replace_all(x,"round_number|_|club_name", " ")
