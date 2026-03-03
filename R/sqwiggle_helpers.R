@@ -32,8 +32,8 @@ sqwigglize_hga =
   function(
     home_distance,
     away_distance,
-    adv_max = 15, 
-    scale = 5) {
+    adv_max = 20, 
+    scale = 10) {
     
     hga = away_distance - home_distance
     
