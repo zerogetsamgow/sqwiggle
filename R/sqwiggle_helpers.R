@@ -5,12 +5,11 @@
 #' @param range_max the maximum margin used for normalisation
 #' @param range_min the minimum margin used for normalisation 
 
-
 sqwigglize_margin =
   function(
     margin,
-    range_max = 100, 
-    range_min = -100) {
+    range_max = 70, 
+    range_min = -70) {
   
   norm_margin = (margin -  range_min) / (range_max -  range_min)
   norm_margin = norm_margin |> 
@@ -32,8 +31,8 @@ sqwigglize_hga =
   function(
     home_distance,
     away_distance,
-    adv_max = 20, 
-    scale = 10) {
+    adv_max = 18, 
+    scale = 9) {
     
     hga = away_distance - home_distance
     
@@ -55,7 +54,7 @@ sqwigglize_hga =
 unsqwiggle_outcome = 
   function(
     outcome,
-    range_max = 100
+    range_max = 70
   ){
     margin = ((outcome -.5) * range_max) |> round()
     return(margin)
@@ -67,10 +66,11 @@ sqwiggle_tip =
     home_team = home_team_club_name,
     away_team = away_team_club_name) {
     
-    tip = if_else(
-      .margin >= 0,
-      home_team, 
-      away_team
+    tip = 
+      dplyr::if_else(
+        .margin >= 0,
+        home_team, 
+        away_team
     )
     
     return(tip)
@@ -82,13 +82,14 @@ sqwiggle_winner =
     home_team = home_team_club_name,
     away_team = away_team_club_name) {
     
-    winner = if_else(
-      .margin > 0,
-      home_team, 
-      if_else(
-        .margin  == 0,
-        "Draw",
-        away_team)
+    winner = 
+      dplyr::if_else(
+        .margin > 0,
+        home_team, 
+        dplyr::if_else(
+          .margin  == 0,
+          "Draw",
+          away_team)
     )
     
     return(winner)
