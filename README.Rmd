@@ -36,7 +36,7 @@ A key motivation for Sqwiggle was to better understand the state of play in the 
 
 Sqwiggle's tipping performance for AFLW 2025 was admirable. Sqwiggle would have won [The Age's expert tips competition](https://www.theage.com.au/sport/afl/aflw-expert-tips-20250814-p5mn1s.html) and finished top ten in [ESPN's footy tips competition](https://www.footytips.com.au/competitions/aflw/ladders?view=ladderScores&season=747&competitionId=706852).
 
-For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder after opening round is below.
+For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder after round `r last_round` is below.
 
 
 ```{r ladder_sqwiggle, echo=FALSE}
@@ -55,7 +55,7 @@ combined_ladder |>
 
 As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle accounts for distance travelled when calculating home ground advantage. 
 
-Sqwiggle's estimate of each team's ELO score from the start of the season to after opening round is shown below.
+Sqwiggle's estimate of each team's ELO score from the start of the season to after round `r last_round` is shown below.
 
 ```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1000}
 
@@ -90,7 +90,7 @@ suppressWarnings(
     breaks = seq(1200,1700,by = 50),
     name = "Sqwiggle score") +
   scale_x_continuvps(
-    breaks = 1L:18L, 
+    breaks = 0L:18L, 
     name = NULL, limits = c(-1.1,last_round+.7)) +
   scale_colour_manual(
    values = unlist(team_colours))+

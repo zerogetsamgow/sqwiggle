@@ -13,7 +13,7 @@ model_data_m =
 library(elo)
 
 # Set parameters for model
-carry_over = .15
+carry_over = .17
 
 k_val = 30
 
