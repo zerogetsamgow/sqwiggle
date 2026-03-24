@@ -31,7 +31,7 @@ oppo_strength =
   fill(value) |> 
   filter(!is.na(value)) |> 
   summarise(
-    total = sum(value)/n(),
+    total = sum(value)/dplyr::n(),
     roo_test = any(opponent == "North Melbourne")
   )
 
@@ -54,10 +54,10 @@ actual_ladder =
 
 # Generate predicted ladder 
 predicted_ladder =
-  start_tip_tbl |> 
-  mutate(team_club_name = tip) |> 
-  group_by(team_club_name) |> 
-  summarise(wins_predicted = n())
+  tips_2026_m |> 
+  dplyr::mutate("team_club_name" = tip) |> 
+  dplyr::group_by(team_club_name) |> 
+  dplyr::summarise(wins_predicted = dplyr::n())
 
 
 average_score = season_2025 |> 
@@ -94,7 +94,8 @@ combined_ladder =
     starts_with("position")
   ) |> 
   arrange(position_current) |> 
-  mutate(position_change =  position_predicted - position_current) |> 
+  mutate(position_change =  position_current - position_predicted) |> 
   left_join(
     oppo_strength |> rename("team_club_name" = team, "opposition_strength" = total)
-  )
+  ) |> 
+  arrange(position_predicted)

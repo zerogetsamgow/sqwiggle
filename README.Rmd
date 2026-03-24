@@ -12,7 +12,6 @@ knitr::opts_chunk$set(
 )
 library(tidyverse)
 library(vpstheme)
-library(geomtextpath)
 library(kableExtra)
 ```
 

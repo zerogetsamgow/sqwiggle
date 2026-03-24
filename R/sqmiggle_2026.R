@@ -304,11 +304,13 @@ oppo_strength =
     by = dplyr::join_by("round_number", "opponent")
   ) |> 
   dplyr::group_by(
-    team
+    opponent
   ) |> 
-  dplyr::arrange(team, round_number) |> 
+  dplyr::arrange(opponent, round_number) |> 
   tidyr::fill(value) |> 
   dplyr::filter(!is.na(value)) |> 
+  dplyr::group_by(team) |> 
+  dplyr::arrange(team, round_number) |> 
   dplyr::summarise(
     total = sum(value)/dplyr::n(),
     .groups = "drop"
@@ -333,7 +335,7 @@ actual_ladder =
 
 # Generate predicted ladder 
 predicted_ladder =
-  start_tip_tbl_m|> 
+  tips_2026_m |> 
   dplyr::mutate(team_club_name = tip) |> 
   dplyr::group_by(team_club_name) |> 
   dplyr::summarise(wins_predicted = dplyr::n())
@@ -391,11 +393,12 @@ combined_ladder =
   dplyr::arrange(position_current) |> 
   dplyr::mutate(
     position_change = 
-      position_predicted - position_current) |> 
+       position_current - position_predicted) |> 
   dplyr::left_join(
     oppo_strength |>
       dplyr::rename(
         "team_club_name" = team,
         "opposition_strength" = total)
-  )
+  ) |> 
+  dplyr::arrange(position_predicted)
 
