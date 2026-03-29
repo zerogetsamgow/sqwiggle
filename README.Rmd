@@ -1,6 +1,7 @@
 ---
 output: github_document
 always_allow_html: true
+
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -11,8 +12,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-library(vpstheme)
-library(kableExtra)
+
 ```
 
 ```{r update_sqwiggle, include=FALSE}

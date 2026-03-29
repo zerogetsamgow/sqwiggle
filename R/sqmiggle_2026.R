@@ -7,7 +7,8 @@ model_data_m =
   dplyr::mutate(
     sqmiggle_outcome = 
       sqwigglize_margin(home_score_total_score - away_score_total_score),
-    home_game_advantage = sqwigglize_hga(home_distance, away_distance)) 
+    home_game_advantage = sqwigglize_hga(home_distance, away_distance),
+    away_game_advantage = -1*sqwigglize_hga(away_distance, home_distance)) 
 
 
 library(elo)
@@ -21,7 +22,7 @@ k_val = 30
 sqmiggle_elo_2026 = 
   elo.run(
     sqmiggle_outcome ~
-      adjust(home_team_club_name, home_game_advantage) +
+      adjust(home_team_club_name, (home_game_advantage+away_game_advantage)) +
       away_team_club_name +
       regress(comp_season_name, 1500, carry_over) +
       group(round_provider_id),
@@ -58,7 +59,11 @@ season_2026_m =
       dplyr::rename(
         "away_team_club_name" = team_club_name,
         "away_distance"= venue_distance)) |> 
-  dplyr::mutate(home_game_advantage = sqwigglize_hga(home_distance, away_distance))
+  dplyr::mutate(
+    home_game_advantage =
+      sqwigglize_hga(home_distance, away_distance),
+    away_game_advantage =
+      -1*sqwigglize_hga(away_distance, home_distance))
 
 # Generate start of season tips
 start_predict_m = 
@@ -74,12 +79,14 @@ start_tip_tbl_m =
   dplyr::select(
     round_round_number, 
     tidyselect::contains("club_name"), 
-    prediction, home_game_advantage) |>
+    prediction, 
+    home_game_advantage, 
+    away_game_advantage) |>
   dplyr::mutate(
     margin_predicted = 
       round(
         unsqwiggle_outcome(prediction) + 
-          home_game_advantage,
+          (home_game_advantage + away_game_advantage),
         0),
     tip = sqwiggle_tip(
       .margin = margin_predicted ,
@@ -144,11 +151,13 @@ for(.round in 0:last_round) {
     dplyr::select(
       round_round_number, 
       tidyselect::contains("club_name"), 
-      prediction, home_game_advantage) |>
+      prediction, 
+      home_game_advantage,
+      away_game_advantage) |>
     dplyr::mutate(
       margin_predicted = 
         round(unsqwiggle_outcome(prediction) +
-                home_game_advantage, 0),
+                (home_game_advantage+away_game_advantage), 0),
       tip = 
         sqwiggle_tip(
           .margin = margin_predicted ,
@@ -197,7 +206,9 @@ for(.round in 0:last_round) {
   sqmiggle_elo_2026 = 
     elo.run(
       sqmiggle_outcome ~
-        adjust(home_team_club_name, home_game_advantage) +
+        adjust(
+          home_team_club_name, 
+          (home_game_advantage + away_game_advantage)) +
         away_team_club_name +
         regress(comp_season_name, 1500, carry_over) +
         group(round_provider_id),
@@ -235,12 +246,18 @@ tip_tbl =
   dplyr::select(
     round_round_number,
     tidyselect::contains("club_name"), 
-    prediction, home_game_advantage) |>
+    prediction, 
+    home_game_advantage,
+    away_game_advantage) |>
   dplyr::mutate(
-    margin_predicted = round(unsqwiggle_outcome(prediction)+home_game_advantage,0),
-         tip = sqwiggle_tip(.margin = margin_predicted,
-                            home_team = home_team_club_name,
-                            away_team = away_team_club_name))
+    margin_predicted = 
+      round(unsqwiggle_outcome(prediction) +
+              (home_game_advantage + away_game_advantage),0),
+    tip = 
+      sqwiggle_tip(
+        .margin = margin_predicted,
+        home_team = home_team_club_name,
+        away_team = away_team_club_name))
 
 tips_2026_m = 
   dplyr::bind_rows(
@@ -336,6 +353,8 @@ actual_ladder =
 # Generate predicted ladder 
 predicted_ladder =
   tips_2026_m |> 
+  dplyr::left_join(wins_2026_m) |> 
+  dplyr::mutate(tip = dplyr::coalesce(winner,tip)) |> 
   dplyr::mutate(team_club_name = tip) |> 
   dplyr::group_by(team_club_name) |> 
   dplyr::summarise(wins_predicted = dplyr::n())
