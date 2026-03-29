@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(tidyverse)
+
 library(vpstheme)
 library(kableExtra)
 ```
@@ -41,11 +41,13 @@ For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder 
 ```{r ladder_sqwiggle, echo=FALSE}
 
 combined_ladder |>
-  rename_with(\(x) str_replace_all(x,"_|club", " ") |> str_to_sentence()) |> 
+  dplyr::rename_with(
+    \(x) stringr::str_replace_all(x,"_|club", " ") |> 
+      stringr::str_to_sentence()) |> 
   knitr::kable() |> 
-   kable_styling()  |> 
-   row_spec(1:8, background = bv.crystal) |> 
-   row_spec(9:18, background = bv.white)
+   kableExtra::kable_styling()  |> 
+   kableExtra::row_spec(1:8, background = bv.crystal) |> 
+   kableExtra::row_spec(9:18, background = bv.white)
 
 ```
 
@@ -59,9 +61,11 @@ Sqwiggle's estimate of each team's ELO score from the start of the season to aft
 ```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1000}
 
 suppressWarnings(
-  ggplot(
-    data = sqmiggles_2026 |> mutate(ymin = 1500, xmin = 0),
-    aes(
+  ggplot2::ggplot(
+    data = 
+      sqmiggles_2026 |> 
+      dplyr::mutate(ymin = 1500, xmin = 0),
+    ggplot2::aes(
       x = round_number, 
       y = value, 
       xmax = round_number, 
@@ -73,34 +77,34 @@ suppressWarnings(
       label = team_club_name, 
       fill = team_club_name)
   ) +
-  geom_hline(
+  ggplot2::geom_hline(
     yintercept = 1500, 
-    colour = bv.charcoal, 
+    colour = vpstheme::bv.charcoal, 
     linetype  = 2) +
-  geom_line() +
-  geom_ribbon(outline.type = "upper") +
-  theme_vps_dh(base_size = 7) +
-  facet_wrap(
-    facets = vars(team_club_name),
+  ggplot2::geom_line() +
+  ggplot2::geom_ribbon(outline.type = "upper") +
+  vpstheme::theme_vps_dh(base_size = 7) +
+  ggplot2::facet_wrap(
+    facets = ggplot2::vars(team_club_name),
     ncol = 6,
     strip.position = "top") +
-  scale_y_continuous(
+  ggplot2::scale_y_continuous(
     limits = c(1240,1660),
     breaks = seq(1200,1700,by = 50),
     name = "Sqwiggle score") +
-  scale_x_continuvps(
+  vpstheme::scale_x_continuvps(
     breaks = 0L:18L, 
     name = NULL, limits = c(-1.1,last_round+.7)) +
-  scale_colour_manual(
+  ggplot2::scale_colour_manual(
    values = unlist(team_colours))+
-  scale_fill_manual(
-    values = alpha(unlist(team_colours),.5))+
-  guides(
+  ggplot2::scale_fill_manual(
+    values = ggplot2::alpha(unlist(team_colours),.5))+
+  ggplot2::guides(
     colour = "none", fill = "none") +
-  labs(
+  ggplot2::labs(
     caption = "Note: 1500 is the base score in Sqwiggle.")+
-  theme(
-    axis.line.x = element_blank(),
+  ggplot2::theme(
+    axis.line.x = ggplot2::element_blank(),
     strip.placement = "inside")
 )
 ```
@@ -112,15 +116,17 @@ Keep track of tipping performance here as the season progresses.
 ```{r summarise_sqwiggle, echo=FALSE}
 
 tipping_results |> 
-  group_by(round_round_number) |> 
-  summarise(correct = sum(correct), games = n()) |> 
-  mutate(cumulative = cumsum(correct)) |> 
-  filter(round_round_number <= last_round) |> 
-  rename_with(
-    \(x) str_replace_all(x,"round_|_|club_name", " ")
-    |> str_to_sentence()) |> 
+  dplyr::group_by(round_round_number) |> 
+  dplyr::summarise(correct = sum(correct), games = dplyr::n()) |> 
+  dplyr::mutate(cumulative = cumsum(correct)) |> 
+  dplyr::filter(round_round_number <= last_round) |> 
+  dplyr::rename_with(
+    \(x) stringr::str_replace_all(
+      x,
+      "round_|_|club_name", " ") |> 
+      stringr::str_to_sentence()) |> 
   knitr::kable() |> 
-   kable_styling() 
+   kableExtra::kable_styling() 
 
 ```
 
@@ -129,12 +135,17 @@ Sqwiggles tips for the next round are below.
 ```{r tipped_by_sqwiggle, echo=FALSE}
 
 tips_2026_m |> 
-  filter(round_round_number == (last_round + 1)) |> 
-  mutate(home_game_advantage=round(home_game_advantage)) |> 
-  rename_with(
-    \(x) str_replace_all(x,"round_number|_|club_name", " ")
-    |> str_to_sentence()) |> 
+  dplyr::filter(
+    round_round_number == (last_round + 1)) |> 
+  dplyr::mutate(
+    home_game_advantage =
+      round(home_game_advantage)) |> 
+  dplyr::rename_with(
+    \(x) stringr::str_replace_all(
+      x,
+      "round_number|_|club_name", " ") |> 
+      stringr::str_to_sentence()) |> 
   knitr::kable() |> 
-  kable_styling()
+  kableExtra::kable_styling()
 
 ```
