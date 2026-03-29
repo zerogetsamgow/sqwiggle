@@ -11,8 +11,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
-
 ```
 
 ```{r update_sqwiggle, include=FALSE}
