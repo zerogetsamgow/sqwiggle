@@ -7,8 +7,9 @@ model_data_m =
   dplyr::mutate(
     sqmiggle_outcome = 
       sqwigglize_margin(home_score_total_score - away_score_total_score),
-    home_game_advantage = sqwigglize_hga(home_distance, away_distance),
-    away_game_advantage = -1*sqwigglize_hga(away_distance, home_distance)) 
+    home_game_advantage = 
+      sqwigglize_hga(home_distance, away_distance) -
+       sqwigglize_hga(away_distance, home_distance)) 
 
 
 library(elo)
@@ -17,16 +18,21 @@ library(elo)
 carry_over = .18
 
 k_val = 35
+k_function = function(round) {
+  
+  dplyr::if_else(round<10,40,20)
+  
+}
 
 # Build model
 sqmiggle_elo_2026 = 
   elo.run(
     sqmiggle_outcome ~
-      adjust(home_team_club_name, (home_game_advantage+away_game_advantage)) +
+      adjust(home_team_club_name, (home_game_advantage)) +
       away_team_club_name +
       regress(comp_season_name, 1500, carry_over) +
       group(round_provider_id),
-    k = k_val,
+    k = k_function(model_data_m$round_round_number),
     data = model_data_m) 
 
 # Get current season data
@@ -61,9 +67,8 @@ season_2026_m =
         "away_distance"= venue_distance)) |> 
   dplyr::mutate(
     home_game_advantage =
-      sqwigglize_hga(home_distance, away_distance),
-    away_game_advantage =
-      -1*sqwigglize_hga(away_distance, home_distance))
+      sqwigglize_hga(home_distance, away_distance) -
+       sqwigglize_hga(away_distance, home_distance))
 
 # Generate start of season tips
 start_predict_m = 
@@ -80,13 +85,12 @@ start_tip_tbl_m =
     round_round_number, 
     tidyselect::contains("club_name"), 
     prediction, 
-    home_game_advantage, 
-    away_game_advantage) |>
+    home_game_advantage) |>
   dplyr::mutate(
     margin_predicted = 
       round(
         unsqwiggle_outcome(prediction) + 
-          (home_game_advantage + away_game_advantage),
+          (home_game_advantage),
         0),
     tip = sqwiggle_tip(
       .margin = margin_predicted ,
@@ -126,11 +130,12 @@ if(last_round > -1){
     season_2026_m|> 
     dplyr::mutate(
       sqwiggle_outcome = 
-        sqwigglize_margin(home_score_total_score - away_score_total_score)) 
+        sqwigglize_margin(
+          home_score_total_score - away_score_total_score)) 
 }
 
 
-for(.round in 0:last_round) {
+for(.round in 0:(last_round + 1)) {
   
   # Get data for current round
   round_data = season_2026_m |> 
@@ -152,12 +157,11 @@ for(.round in 0:last_round) {
       round_round_number, 
       tidyselect::contains("club_name"), 
       prediction, 
-      home_game_advantage,
-      away_game_advantage) |>
+      home_game_advantage) |>
     dplyr::mutate(
       margin_predicted = 
         round(unsqwiggle_outcome(prediction) +
-                (home_game_advantage+away_game_advantage), 0),
+                (home_game_advantage), 0),
       tip = 
         sqwiggle_tip(
           .margin = margin_predicted ,
@@ -208,11 +212,11 @@ for(.round in 0:last_round) {
       sqmiggle_outcome ~
         adjust(
           home_team_club_name, 
-          (home_game_advantage + away_game_advantage)) +
+          (home_game_advantage)) +
         away_team_club_name +
         regress(comp_season_name, 1500, carry_over) +
         group(round_provider_id),
-      k = k_val,
+      k = k_function(.round),
       data = model_data_m)
   
   round_sqmiggles = 
@@ -230,7 +234,7 @@ for(.round in 0:last_round) {
 # Get data for future rounds
 future_data = 
   season_2026_m |> 
-  dplyr::filter(round_round_number > last_round)
+  dplyr::filter(round_round_number > (last_round+1))
 
 # Run predictions
 future_predict = 
@@ -241,18 +245,17 @@ future_predict =
              newdata = future_data))
 
 # Convert to tips
-tip_tbl = 
+future_tip_tbl = 
   future_predict |> 
   dplyr::select(
     round_round_number,
     tidyselect::contains("club_name"), 
     prediction, 
-    home_game_advantage,
-    away_game_advantage) |>
+    home_game_advantage) |>
   dplyr::mutate(
     margin_predicted = 
       round(unsqwiggle_outcome(prediction) +
-              (home_game_advantage + away_game_advantage),0),
+              (home_game_advantage ),0),
     tip = 
       sqwiggle_tip(
         .margin = margin_predicted,
@@ -262,7 +265,7 @@ tip_tbl =
 tips_2026_m = 
   dplyr::bind_rows(
     tips_2026_m,
-    tip_tbl)
+    future_tip_tbl)
 
 tipping_results =
   tips_2026_m

@@ -92,7 +92,10 @@ suppressWarnings(
     name = "Sqwiggle score") +
   vpstheme::scale_x_continuvps(
     breaks = 0L:18L, 
-    name = NULL, limits = c(-1.1,last_round+.7)) +
+    name = NULL) +
+  ggplot2::coord_cartesian(
+    xlim = c(-1.1,last_round+.7)
+  ) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours))+
   ggplot2::scale_fill_manual(
@@ -132,9 +135,7 @@ Sqwiggles tips for the next round are below.
 
 ```{r tipped_by_sqwiggle, echo=FALSE}
 
-tips_2026_m |> 
-  dplyr::filter(
-    round_round_number == (last_round + 1)) |> 
+tip_tbl |> 
   dplyr::mutate(
     home_game_advantage =
       round(home_game_advantage)) |> 

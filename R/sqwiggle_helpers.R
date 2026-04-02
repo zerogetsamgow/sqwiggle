@@ -32,7 +32,7 @@ sqwigglize_hga =
     home_distance,
     away_distance,
     adv_max = 18, 
-    scale = 9) {
+    scale = 8) {
     
     hga = away_distance - home_distance
     
