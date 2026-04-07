@@ -15,12 +15,11 @@ model_data_m =
 library(elo)
 
 # Set parameters for model
-carry_over = .18
+carry_over = .19
 
-k_val = 35
 k_function = function(round) {
   
-  dplyr::if_else(round<10,40,20)
+  dplyr::if_else(round<10,38,19)
   
 }
 
@@ -332,7 +331,7 @@ oppo_strength =
   dplyr::group_by(team) |> 
   dplyr::arrange(team, round_number) |> 
   dplyr::summarise(
-    total = sum(value)/dplyr::n(),
+    total = (sum(value)/dplyr::n()) - 1500,
     .groups = "drop"
   )
 

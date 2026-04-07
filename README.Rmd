@@ -37,18 +37,18 @@ For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder 
 
 
 ```{r ladder_sqwiggle, echo=FALSE}
-
 combined_ladder |>
   dplyr::rename_with(
     \(x) stringr::str_replace_all(x,"_|club", " ") |> 
       stringr::str_to_sentence()) |> 
-  knitr::kable() |> 
+   kableExtra::kbl(format.args = list(big.mark = ","), digits = 3) |> 
    kableExtra::kable_styling()  |> 
-   kableExtra::row_spec(1:8, background = bv.crystal) |> 
-   kableExtra::row_spec(9:18, background = bv.white)
-
+   kableExtra::row_spec(1:6, background = bv.crystal) |> 
+   kableExtra::row_spec(7:10, background = bv.smoke) |> 
+   kableExtra::row_spec(11:17, background = bv.white) |> 
+    kableExtra::row_spec(18, background = bv.canary)
 ```
-
+`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team mean opponent is above average strength, that is they have a harder than average draw.`
 
 ## Team strength
 
