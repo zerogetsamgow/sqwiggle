@@ -879,7 +879,7 @@ Richmond
 
 </table>
 
-`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team mean opponent is above average strength, that is they have a harder than average draw.`
+`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw.`
 
 ## Team strength
 
@@ -892,8 +892,11 @@ Sqwiggle’s estimate of each team’s ELO score from the start of the
 season to after round 4 is shown below.
 
 <img src="README_files/figure-gfm/sqwiggle_wiggle-1.png" alt="" width="2000" height="1000" />
+Sqwiggle’s rank of each team based on their ELO score from the start of
+the season to after round 4 is shown below.
 
-## How well did Sqwiggle go at tipping the AFLM in 2026
+<img src="README_files/figure-gfm/sqwiggle_rank-1.png" alt="" width="2000" height="1000" />
+\## How well did Sqwiggle go at tipping the AFLM in 2026
 
 Keep track of tipping performance here as the season progresses.
 

@@ -48,7 +48,7 @@ combined_ladder |>
    kableExtra::row_spec(11:17, background = bv.white) |> 
     kableExtra::row_spec(18, background = bv.canary)
 ```
-`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team mean opponent is above average strength, that is they have a harder than average draw.`
+`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw.`
 
 ## Team strength
 
@@ -87,7 +87,7 @@ suppressWarnings(
     ncol = 6,
     strip.position = "top") +
   ggplot2::scale_y_continuous(
-    limits = c(1240,1660),
+    limits = c(1290,1610),
     breaks = seq(1200,1700,by = 50),
     name = "Sqwiggle score") +
   vpstheme::scale_x_continuvps(
@@ -109,7 +109,58 @@ suppressWarnings(
     strip.placement = "inside")
 )
 ```
+Sqwiggle's rank of each team based on their ELO score from the start of the season to after round `r last_round` is shown below.
 
+```{r sqwiggle_rank, echo=FALSE, out.width = 2000, out.height = 1000}
+
+rank_tbl = 
+  sqmiggles_2026 |> 
+  dplyr::group_by(round_number) |> 
+  dplyr::arrange(round_number, desc(value)) |> 
+  dplyr::mutate(rank = 1L:18L,
+                rank = factor(rank, levels = 18L:1L)) 
+
+labels = 
+  rank_tbl |> 
+  dplyr::ungroup() |> 
+  dplyr::filter(round_number == min(round_number)) |> 
+  dplyr::arrange(value) |> 
+  dplyr::mutate(round_number = round_number - .1)
+  
+
+ ggplot2::ggplot(
+    data = 
+      rank_tbl,
+    ggplot2::aes(
+      x = round_number, 
+      y = rank,
+      colour = team_club_name, 
+      group = team_club_name,
+      label = team_club_name, 
+      fill = team_club_name)
+  ) +
+  ggplot2::geom_line() +
+  ggplot2::geom_text(
+    data = labels,
+    size = 3,
+    hjust = 1,
+  ) +
+  ggplot2::scale_y_discrete(
+    name = NULL, labels = NULL) +
+  vpstheme::scale_x_continuvps(
+    breaks = 0L:18L, 
+    name = NULL) +
+  ggplot2::coord_cartesian(
+    xlim = c(-2.3,last_round+.7)
+  ) +
+  ggplot2::scale_colour_manual(
+   values = unlist(team_colours),
+   guide = NULL) +
+  vpstheme::theme_vps_djcs() +
+  ggplot2::theme(axis.line = ggplot2::element_blank())
+   
+
+```
 ## How well did Sqwiggle go at tipping the AFLM in 2026
 
 Keep track of tipping performance here as the season progresses.
