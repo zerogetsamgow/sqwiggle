@@ -322,16 +322,20 @@ oppo_strength =
       dplyr::rename("opponent" = team_club_name),
     by = dplyr::join_by("round_number", "opponent")
   ) |> 
+  dplyr::group_by(team) |> 
+  dplyr::mutate(
+    to_date = mean(value, na.rm = TRUE) - 1500
+  )  |> 
   dplyr::group_by(
     opponent
   ) |> 
   dplyr::arrange(opponent, round_number) |> 
   tidyr::fill(value) |> 
   dplyr::filter(!is.na(value)) |> 
-  dplyr::group_by(team) |> 
+  dplyr::group_by(team, to_date) |> 
   dplyr::arrange(team, round_number) |> 
   dplyr::summarise(
-    total = (sum(value)/dplyr::n()) - 1500,
+    season = (sum(value)/dplyr::n()) - 1500,
     .groups = "drop"
   )
 
@@ -419,7 +423,69 @@ combined_ladder =
     oppo_strength |>
       dplyr::rename(
         "team_club_name" = team,
-        "opposition_strength" = total)
+        "opposition_strength" = season,
+        "opponents_to_date" = to_date)
   ) |> 
   dplyr::arrange(position_predicted)
 
+
+cumulative_ladder = tibble::tibble()
+
+for (round in 0:last_round) {
+  round_ladder = 
+    fitzRoy::fetch_ladder(
+      season = 2026,
+      round_number = round,
+      comp = "AFLM",
+      source = "AFL"
+    ) |> 
+    janitor::clean_names() |>  
+    dplyr::select(
+      team_club_name,
+      round_number,
+      position,
+      "wins" =  this_season_record_win_loss_record_wins)
+  
+  cumulative_ladder = dplyr::bind_rows(cumulative_ladder,round_ladder)
+  
+}
+
+for(round in (last_round):23) {
+  round_ladder =
+    cumulative_ladder |> 
+    dplyr::filter(round_number == round) |> 
+    dplyr::bind_rows(
+      tips_2026_m |> 
+      dplyr::filter(round_round_number == round +1) |> 
+      tidyr::pivot_longer(tidyselect::contains('club_name'), values_to = "team_club_name") |>
+      dplyr::right_join(
+        tibble::tibble(
+          "team_club_name"=names(team_colours), 
+          round_round_number = round + 1)) |>   
+      dplyr::group_by(team_club_name, "round_number" = round_round_number) |> 
+      dplyr::summarise(
+        win = 
+          as.integer(tip == team_club_name) |> 
+          dplyr::coalesce(0))) |> 
+    dplyr::group_by(team_club_name) |> 
+    tidyr::fill(position) |> 
+    tidyr::fill(wins) |> 
+    dplyr::mutate(wins = wins + win) |> 
+    dplyr::filter(round_number == round +1) |> 
+    dplyr::group_by(round_number) |> 
+    dplyr::arrange(desc(wins), position) |> 
+    dplyr::mutate(position = 1:18)
+    
+  cumulative_ladder = dplyr::bind_rows(cumulative_ladder, round_ladder)
+}
+
+cumulative_ladder = 
+  cumulative_ladder |> 
+  dplyr::select(
+    round_number,
+    team_club_name,
+    position
+  ) |> 
+  dplyr::mutate(
+    rank = factor(position, levels = 18L:1L)
+  )

@@ -1,7 +1,6 @@
 ---
 output: github_document
 always_allow_html: true
-
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -17,7 +16,7 @@ knitr::opts_chunk$set(
 source("./r/sqmiggle_2026.R")
 ```
 
-# Sqwiggle 
+# Sqwiggle
 
 ## Introduction
 
@@ -35,7 +34,6 @@ Sqwiggle's tipping performance for AFLW 2025 was admirable. Sqwiggle would have 
 
 For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder after round `r last_round` is below.
 
-
 ```{r ladder_sqwiggle, echo=FALSE}
 combined_ladder |>
   dplyr::rename_with(
@@ -48,16 +46,54 @@ combined_ladder |>
    kableExtra::row_spec(11:17, background = bv.white) |> 
     kableExtra::row_spec(18, background = bv.canary)
 ```
+
 `Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw.`
+
+Here is a look at how positions are predicted to change over the remainder of the year.
+
+```{r table_over_year, echo=FALSE, out.width = 2000, out.height = 800}
+
+# Get labels
+ladder_labels = 
+  cumulative_ladder |> 
+  dplyr::ungroup() |> 
+  dplyr::filter(round_number == last_round - 1) |> 
+  dplyr::arrange(rank) |> 
+  dplyr::mutate(round_number = last_round - 1.1)
+# Create plot
+
+ggplot2::ggplot(
+  data = cumulative_ladder |> dplyr::filter(round_number >= last_round -1 ), 
+  ggplot2::aes(
+    x = round_number, 
+    y = rank,
+    colour = team_club_name, 
+    group = team_club_name, 
+    label = team_club_name, 
+    fill = team_club_name) ) + 
+  ggplot2::geom_line() + 
+  ggplot2::geom_text(
+    data = ladder_labels, size = 3, hjust = 1, ) +
+  ggplot2::scale_y_discrete(
+    name = NULL, labels = NULL) +
+  vpstheme::scale_x_continuvps(
+    breaks = (last_round-1):24L, name = NULL) +
+  ggplot2::coord_cartesian(
+    xlim = c(last_round - 4,24.5)) +
+  ggplot2::scale_colour_manual(
+    values = unlist(team_colours), guide = NULL) +
+  vpstheme::theme_vps_djcs(base_size = 10) +
+  ggplot2::theme(axis.line = ggplot2::element_blank())
+
+```
 
 ## Team strength
 
-As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle accounts for distance travelled when calculating home ground advantage. 
+As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle accounts for distance travelled when calculating home ground advantage.
 
 Sqwiggle's estimate of each team's ELO score from the start of the season to after round `r last_round` is shown below.
 
 ```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1000}
-
 suppressWarnings(
   ggplot2::ggplot(
     data = 
@@ -73,8 +109,7 @@ suppressWarnings(
       colour = team_club_name, 
       group = team_club_name,
       label = team_club_name, 
-      fill = team_club_name)
-  ) +
+      fill = team_club_name)) +
   ggplot2::geom_hline(
     yintercept = 1500, 
     colour = vpstheme::bv.charcoal, 
@@ -106,20 +141,20 @@ suppressWarnings(
     caption = "Note: 1500 is the base score in Sqwiggle.")+
   ggplot2::theme(
     axis.line.x = ggplot2::element_blank(),
-    strip.placement = "inside")
-)
+    strip.placement = "inside"))
 ```
+
 Sqwiggle's rank of each team based on their ELO score from the start of the season to after round `r last_round` is shown below.
 
 ```{r sqwiggle_rank, echo=FALSE, out.width = 2000, out.height = 1000}
-
+# Build table of sqwiggle rank per round
 rank_tbl = 
   sqmiggles_2026 |> 
   dplyr::group_by(round_number) |> 
   dplyr::arrange(round_number, desc(value)) |> 
   dplyr::mutate(rank = 1L:18L,
                 rank = factor(rank, levels = 18L:1L)) 
-
+# Get labels
 labels = 
   rank_tbl |> 
   dplyr::ungroup() |> 
@@ -127,7 +162,7 @@ labels =
   dplyr::arrange(value) |> 
   dplyr::mutate(round_number = round_number - .1)
   
-
+# Create plot
  ggplot2::ggplot(
     data = 
       rank_tbl,
@@ -151,22 +186,19 @@ labels =
     breaks = 0L:18L, 
     name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(-2.3,last_round+.7)
-  ) +
+    xlim = c(-2.3,last_round+.7)) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours),
    guide = NULL) +
   vpstheme::theme_vps_djcs() +
   ggplot2::theme(axis.line = ggplot2::element_blank())
-   
-
 ```
+
 ## How well did Sqwiggle go at tipping the AFLM in 2026
 
 Keep track of tipping performance here as the season progresses.
 
 ```{r summarise_sqwiggle, echo=FALSE}
-
 tipping_results |> 
   dplyr::group_by(round_round_number) |> 
   dplyr::summarise(correct = sum(correct), games = dplyr::n()) |> 
@@ -179,13 +211,11 @@ tipping_results |>
       stringr::str_to_sentence()) |> 
   knitr::kable() |> 
    kableExtra::kable_styling() 
-
 ```
 
 Sqwiggles tips for the next round are below.
 
 ```{r tipped_by_sqwiggle, echo=FALSE}
-
 tip_tbl |> 
   dplyr::mutate(
     home_game_advantage =
@@ -197,5 +227,4 @@ tip_tbl |>
       stringr::str_to_sentence()) |> 
   knitr::kable() |> 
   kableExtra::kable_styling()
-
 ```
