@@ -2,7 +2,6 @@
 output: github_document
 always_allow_html: true
 ---
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
@@ -46,7 +45,6 @@ combined_ladder |>
    kableExtra::row_spec(11:17, background = bv.white) |> 
     kableExtra::row_spec(18, background = bv.canary)
 ```
-
 `Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw.`
 
 Here is a look at how positions are predicted to change over the remainder of the year.
@@ -79,7 +77,7 @@ ggplot2::ggplot(
   vpstheme::scale_x_continuvps(
     breaks = (last_round-1):24L, name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(last_round - 4,24.5)) +
+    xlim = c(last_round - 5,24.5)) +
   ggplot2::scale_colour_manual(
     values = unlist(team_colours), guide = NULL) +
   vpstheme::theme_vps_djcs(base_size = 10) +
@@ -186,7 +184,7 @@ labels =
     breaks = 0L:18L, 
     name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(-2.3,last_round+.7)) +
+    xlim = c(-3.3,last_round+.7)) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours),
    guide = NULL) +

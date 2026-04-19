@@ -318,7 +318,8 @@ oppo_strength =
   ) |> 
   dplyr::left_join(
     sqmiggles_2026 |> 
-      dplyr::mutate(round_number = round_number + 1) |> 
+      dplyr::filter(round_number <= last_round) |> 
+      dplyr::mutate(round_number = round_number) |> 
       dplyr::rename("opponent" = team_club_name),
     by = dplyr::join_by("round_number", "opponent")
   ) |> 
