@@ -45,7 +45,7 @@ combined_ladder |>
    kableExtra::row_spec(11:17, background = bv.white) |> 
     kableExtra::row_spec(18, background = bv.canary)
 ```
-`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw.`
+`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw. Opposition to date, is the number of above average teams played so far`
 
 Here is a look at how positions are predicted to change over the remainder of the year.
 
@@ -55,13 +55,13 @@ Here is a look at how positions are predicted to change over the remainder of th
 ladder_labels = 
   cumulative_ladder |> 
   dplyr::ungroup() |> 
-  dplyr::filter(round_number == last_round - 1) |> 
+  dplyr::filter(round_number == last_round) |> 
   dplyr::arrange(rank) |> 
-  dplyr::mutate(round_number = last_round - 1.1)
+  dplyr::mutate(round_number = last_round - .1)
 # Create plot
 
 ggplot2::ggplot(
-  data = cumulative_ladder |> dplyr::filter(round_number >= last_round -1 ), 
+  data = cumulative_ladder |> dplyr::filter(round_number >= last_round), 
   ggplot2::aes(
     x = round_number, 
     y = rank,
@@ -127,7 +127,7 @@ suppressWarnings(
     breaks = 0L:18L, 
     name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(-1.1,last_round+.7)
+    xlim = c(-1.1,last_round)
   ) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours))+
@@ -184,7 +184,7 @@ labels =
     breaks = 0L:18L, 
     name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(-3.3,last_round+.7)) +
+    xlim = c(-3.3,last_round)) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours),
    guide = NULL) +

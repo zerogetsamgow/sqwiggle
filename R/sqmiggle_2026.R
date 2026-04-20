@@ -325,7 +325,7 @@ oppo_strength =
   ) |> 
   dplyr::group_by(team) |> 
   dplyr::mutate(
-    to_date = mean(value, na.rm = TRUE) - 1500
+    to_date = sum(value >1500, na.rm =  TRUE)
   )  |> 
   dplyr::group_by(
     opponent

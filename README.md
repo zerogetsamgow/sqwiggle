@@ -127,7 +127,7 @@ Geelong Cats
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-21.021
+5
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -176,7 +176,7 @@ Hawthorn
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-19.921
+4
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -225,7 +225,7 @@ Sydney Swans
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-4.909
+4
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -274,7 +274,7 @@ Brisbane Lions
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-6.501
+3
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -323,7 +323,7 @@ Fremantle
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
--25.079
+3
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -372,7 +372,7 @@ Western Bulldogs
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-42.324
+5
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -421,7 +421,7 @@ Gold Coast SUNS
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
--42.776
+2
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
@@ -470,7 +470,7 @@ Adelaide Crows
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-33.638
+4
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
@@ -519,7 +519,7 @@ Collingwood
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-24.925
+4
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
@@ -568,7 +568,7 @@ St Kilda
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-26.060
+4
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
@@ -617,7 +617,7 @@ Melbourne
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-1.152
+3
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -666,7 +666,7 @@ GWS GIANTS
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-17.896
+4
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -715,7 +715,7 @@ Port Adelaide
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--71.084
+1
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -764,7 +764,7 @@ North Melbourne
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--73.523
+1
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -813,7 +813,7 @@ Carlton
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--15.646
+3
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -862,7 +862,7 @@ West Coast Eagles
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-16.099
+4
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -911,7 +911,7 @@ Essendon
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-12.208
+3
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -960,7 +960,7 @@ Richmond
 
 <td style="text-align:right;background-color: rgba(243, 229, 0, 255) !important;">
 
-1.150
+3
 </td>
 
 <td style="text-align:right;background-color: rgba(243, 229, 0, 255) !important;">
@@ -974,7 +974,7 @@ Richmond
 
 </table>
 
-`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw.`
+`Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw. Opposition to date, is the number of above average teams played so far`
 
 Here is a look at how positions are predicted to change over the
 remainder of the year.
