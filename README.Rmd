@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
 ```{r update_sqwiggle, include=FALSE}
 source("./r/sqmiggle_2026.R")
 ```
-
 # Sqwiggle
 
 ## Introduction
