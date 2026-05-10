@@ -18,7 +18,6 @@ source("./r/sqmiggle_2026.R")
 ## Introduction
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 Sqwiggle is a simple [ELO](https://cran.r-project.org/web/packages/fitzRoy/vignettes/elo-ratings-example.html) model for predicting [AFLW](https://www.afl.com.au/aflw) and [AFLM](https://www.afl.com.au)results built in R using the [fitzRoy](https://cran.r-project.org/web/packages/fitzRoy/index.html) and [elo](https://cran.r-project.org/web/packages/elo/index.html) packages. The name is derived from [Squiggle](https://squiggle.com.au/).
