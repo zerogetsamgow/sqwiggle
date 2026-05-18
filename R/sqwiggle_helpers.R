@@ -8,8 +8,8 @@
 sqwigglize_margin =
   function(
     margin,
-    range_max = 70, 
-    range_min = -70) {
+    range_max = 75, 
+    range_min = -75) {
   
   norm_margin = (margin -  range_min) / (range_max -  range_min)
   norm_margin = norm_margin |> 
@@ -31,12 +31,12 @@ sqwigglize_hga =
   function(
     home_distance,
     away_distance,
-    adv_max = 16, 
+    adv_max = 24, 
     scale = 8) {
     
     hga = 
       dplyr::if_else(
-        home_distance*away_distance >0,
+        home_distance*away_distance > 0,
         0,
         away_distance - home_distance
         )

@@ -15,11 +15,15 @@ model_data_m =
 library(elo)
 
 # Set parameters for model
-carry_over = .19
+carry_over = .20
 
 k_function = function(round) {
   
-  dplyr::if_else(round<10,38,19)
+  dplyr::case_when(
+    round<6 ~ 36,
+    round<13 ~ 28,
+    TRUE ~ 20
+    )
   
 }
 
