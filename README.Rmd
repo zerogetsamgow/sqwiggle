@@ -209,7 +209,6 @@ tipping_results |>
 ```
 
 Sqwiggles tips for the next round are below.
-
 ```{r tipped_by_sqwiggle, echo=FALSE}
 tip_tbl |> 
   dplyr::mutate(
