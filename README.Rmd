@@ -81,6 +81,7 @@ ggplot2::ggplot(
   ggplot2::theme(axis.line = ggplot2::element_blank())
 
 ```
+
 ## Team strength
 
 As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle accounts for distance travelled when calculating home ground advantage.
@@ -209,6 +210,7 @@ tipping_results |>
 ```
 
 Sqwiggles tips for the next round are below.
+
 ```{r tipped_by_sqwiggle, echo=FALSE}
 tip_tbl |> 
   dplyr::mutate(

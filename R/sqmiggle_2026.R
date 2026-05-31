@@ -3,6 +3,7 @@ source("./r/sqwiggle_helpers.R")
 # Extract pre-2025 fixtures to build starting model
 model_data_m =
   arrow::read_parquet(file = "./data/fixture_history_m.parquet") |> 
+  dplyr::filter_out(utc_start_time < lubridate::ymd("2025-1-1")) |> 
   # Add outcome variable using helper function
   dplyr::mutate(
     sqmiggle_outcome = 
@@ -271,7 +272,20 @@ tips_2026_m =
     future_tip_tbl)
 
 tipping_results =
-  tips_2026_m
+  dplyr::bind_rows(
+    # Improved model at round 13, by using less old data.
+    # Get old tips
+    arrow::read_parquet(
+      file = "./data/old_model_tips.parquet") |> 
+      dplyr::filter(
+        round_round_number < 13),
+    # Use nes tip after round 12
+    tips_2026_m |> 
+      dplyr::filter_out(
+        round_round_number < 13
+      )
+  )
+  
 
 if(nrow(wins_2026_m) > 0) {
   tipping_results =
@@ -494,3 +508,5 @@ cumulative_ladder =
   dplyr::mutate(
     rank = factor(position, levels = 18L:1L)
   )
+
+
