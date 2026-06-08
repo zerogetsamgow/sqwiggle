@@ -72,7 +72,7 @@ ggplot2::ggplot(
   ggplot2::scale_y_discrete(
     name = NULL, labels = NULL) +
   vpstheme::scale_x_continuvps(
-    breaks = (last_round-1):24L, name = NULL) +
+    breaks = (last_round):24L, name = NULL) +
   ggplot2::coord_cartesian(
     xlim = c(last_round - 5,24.5)) +
   ggplot2::scale_colour_manual(
@@ -86,13 +86,14 @@ ggplot2::ggplot(
 
 As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle accounts for distance travelled when calculating home ground advantage.
 
-Sqwiggle's estimate of each team's ELO score from the start of the season to after round `r last_round` is shown below.
+Sqwiggle's estimate of each team's ELO score for the eight rounds up to `r last_round` is shown below.
 
-```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1000}
+```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1500}
 suppressWarnings(
   ggplot2::ggplot(
     data = 
       sqmiggles_2026 |> 
+      dplyr::filter(round_number >= last_round-7) |> 
       dplyr::mutate(ymin = 1500, xmin = 0),
     ggplot2::aes(
       x = round_number, 
@@ -117,14 +118,14 @@ suppressWarnings(
     ncol = 6,
     strip.position = "top") +
   ggplot2::scale_y_continuous(
-    limits = c(1290,1610),
-    breaks = seq(1200,1700,by = 50),
+    limits = c(1340,1605),
+    breaks = seq(1300,1700,by = 50),
     name = "Sqwiggle score") +
   vpstheme::scale_x_continuvps(
-    breaks = 0L:18L, 
+    breaks = 0L:24L, 
     name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(-1.1,last_round)
+    xlim = c(last_round-7.1,last_round)
   ) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours))+
@@ -147,6 +148,7 @@ Sqwiggle's rank of each team based on their ELO score from the start of the seas
 rank_tbl = 
   sqmiggles_2026 |> 
   dplyr::group_by(round_number) |> 
+  dplyr::filter_out(round_number<0) |> 
   dplyr::arrange(round_number, desc(value)) |> 
   dplyr::mutate(rank = 1L:18L,
                 rank = factor(rank, levels = 18L:1L)) 
@@ -179,14 +181,14 @@ labels =
   ggplot2::scale_y_discrete(
     name = NULL, labels = NULL) +
   vpstheme::scale_x_continuvps(
-    breaks = 0L:18L, 
+    breaks = -0L:24L, 
     name = NULL) +
   ggplot2::coord_cartesian(
     xlim = c(-3.3,last_round)) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours),
    guide = NULL) +
-  vpstheme::theme_vps_djcs() +
+  vpstheme::theme_vps_djcs(base_size = 10) +
   ggplot2::theme(axis.line = ggplot2::element_blank())
 ```
 
@@ -209,7 +211,7 @@ tipping_results |>
    kableExtra::kable_styling() 
 ```
 
-Sqwiggles tips for the next round are below.
+Sqwiggle's tips for the next round are below.
 
 ```{r tipped_by_sqwiggle, echo=FALSE}
 tip_tbl |> 
