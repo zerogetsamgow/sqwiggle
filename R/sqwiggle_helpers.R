@@ -31,15 +31,15 @@ sqwigglize_hga =
   function(
     home_distance,
     away_distance,
-    adv_max = 24, 
+    adv_max = 6, 
     scale = 8) {
     
     hga = 
-      dplyr::if_else(
-        home_distance*away_distance > 0,
-        0,
-        away_distance - home_distance
-        )
+      dplyr::case_when(
+        home_distance*away_distance > 0 ~ 0,
+        home_distance + away_distance == 0 ~ 0,
+        home_distance > 0 ~ -sqrt(home_distance - away_distance),
+        TRUE ~ sqrt(away_distance - home_distance))
   
     
     norm_hga = hga  / adv_max

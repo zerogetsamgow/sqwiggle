@@ -275,17 +275,19 @@ tipping_results =
   dplyr::bind_rows(
     # Improved model at round 13, by using less old data.
     # Get old tips
-    arrow::read_parquet(
-      file = "./data/old_model_tips.parquet") |> 
+   arrow::read_parquet(
+      file = "./data/old_model_tips_2.parquet") |> 
       dplyr::filter(
-        round_round_number < 13),
+        round_round_number < 14) |> 
+     dplyr::select(-winner),
     # Use nes tip after round 12
-    tips_2026_m |> 
+     tips_2026_m |> 
       dplyr::filter_out(
-        round_round_number < 13
+        round_round_number < 14
       )
   )
   
+
 
 if(nrow(wins_2026_m) > 0) {
   tipping_results =
