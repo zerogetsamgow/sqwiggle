@@ -3,27 +3,26 @@ source("./r/sqwiggle_helpers.R")
 # Extract pre-2025 fixtures to build starting model
 model_data_m =
   arrow::read_parquet(file = "./data/fixture_history_m.parquet") |> 
-  dplyr::filter_out(utc_start_time < lubridate::ymd("2025-1-1")) |> 
+  dplyr::filter_out(utc_start_time < lubridate::ymd("2024-1-1")) |> 
   # Add outcome variable using helper function
   dplyr::mutate(
     sqmiggle_outcome = 
       sqwigglize_margin(home_score_total_score - away_score_total_score),
     home_game_advantage = 
-      sqwigglize_hga(home_distance, away_distance) -
-       sqwigglize_hga(away_distance, home_distance)) 
+      sqwigglize_hga(home_distance, away_distance)) 
 
 
 library(elo)
 
 # Set parameters for model
-carry_over = .20
+carry_over = .15
 
 k_function = function(round) {
   
   dplyr::case_when(
     round<6 ~ 36,
-    round<13 ~ 28,
-    TRUE ~ 20
+    round<13 ~ 30,
+    TRUE ~ 24
     )
   
 }
@@ -32,7 +31,7 @@ k_function = function(round) {
 sqmiggle_elo_2026 = 
   elo.run(
     sqmiggle_outcome ~
-      adjust(home_team_club_name, (home_game_advantage)) +
+      adjust(home_team_club_name, home_game_advantage) +
       away_team_club_name +
       regress(comp_season_name, 1500, carry_over) +
       group(round_provider_id),
@@ -71,8 +70,7 @@ season_2026_m =
         "away_distance"= venue_distance)) |> 
   dplyr::mutate(
     home_game_advantage =
-      sqwigglize_hga(home_distance, away_distance) -
-       sqwigglize_hga(away_distance, home_distance))
+      sqwigglize_hga(home_distance, away_distance))
 
 # Generate start of season tips
 start_predict_m = 
@@ -271,6 +269,7 @@ tips_2026_m =
     tips_2026_m,
     future_tip_tbl)
 
+cut_off = 0
 tipping_results =
   dplyr::bind_rows(
     # Improved model at round 13, by using less old data.
@@ -278,12 +277,12 @@ tipping_results =
    arrow::read_parquet(
       file = "./data/old_model_tips_2.parquet") |> 
       dplyr::filter(
-        round_round_number < 14) |> 
+        round_round_number < cut_off) |> 
      dplyr::select(-winner),
     # Use nes tip after round 12
      tips_2026_m |> 
       dplyr::filter_out(
-        round_round_number < 14
+        round_round_number < cut_off
       )
   )
   

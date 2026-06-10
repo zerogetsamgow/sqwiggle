@@ -31,21 +31,25 @@ sqwigglize_hga =
   function(
     home_distance,
     away_distance,
-    adv_max = 6, 
+    adv_max = 8, 
     scale = 8) {
     
+    advantage = (1/4)*pmax(6*abs(away_distance - home_distance)-1,0)^(2/3)
     hga = 
       dplyr::case_when(
+        # Both travel, no advantage
         home_distance*away_distance > 0 ~ 0,
-        home_distance + away_distance == 0 ~ 0,
-        home_distance > 0 ~ -sqrt(home_distance - away_distance),
-        TRUE ~ sqrt(away_distance - home_distance))
+        home_distance > away_distance ~ -advantage,
+        #(home_distance + away_distance) == 0 ~ 0,
+        TRUE ~ advantage)
   
     
-    norm_hga = hga  / adv_max
-    norm_hga = norm_hga |> 
+    norm_hga = hga / adv_max
+    
+    norm_hga = 
+      norm_hga |> 
       pmin(1) |> 
-      pmax(0)
+      pmax(-1)
     
     norm_hga = norm_hga * scale
     

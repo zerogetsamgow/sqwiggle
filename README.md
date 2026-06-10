@@ -117,7 +117,7 @@ Fremantle
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-2
+3
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -132,7 +132,7 @@ Fremantle
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
--1.843
+-1.967
 </td>
 
 </tr>
@@ -181,7 +181,7 @@ Sydney Swans
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
--0.841
+-0.590
 </td>
 
 </tr>
@@ -200,7 +200,7 @@ Geelong Cats
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-16
+17
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -230,7 +230,7 @@ Geelong Cats
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-3.956
+4.138
 </td>
 
 </tr>
@@ -264,7 +264,7 @@ Hawthorn
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-3
+2
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -279,7 +279,7 @@ Hawthorn
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
--0.328
+-0.586
 </td>
 
 </tr>
@@ -313,7 +313,7 @@ Adelaide Crows
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-5
+6
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -328,7 +328,7 @@ Adelaide Crows
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-0.751
+1.327
 </td>
 
 </tr>
@@ -337,12 +337,12 @@ Adelaide Crows
 
 <td style="text-align:left;background-color: rgba(136, 219, 223, 255) !important;">
 
-Western Bulldogs
+Brisbane Lions
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-8
+7
 </td>
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
@@ -352,61 +352,51 @@ Western Bulldogs
 
 <td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
 
-6
-</td>
-
-<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
-
-6
-</td>
-
-<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
-
-7
-</td>
-
-<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
-
-0
-</td>
-
-<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
-
-10
-</td>
-
-<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
-
-7.101
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;background-color: rgba(217, 217, 214, 255) !important;">
-
-Brisbane Lions
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
-7
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
-14
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
 9
 </td>
 
+<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
+
+6
+</td>
+
+<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
+
+5
+</td>
+
+<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
+
+3
+</td>
+
+<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
+
+8
+</td>
+
+<td style="text-align:right;background-color: rgba(136, 219, 223, 255) !important;">
+
+-0.249
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;background-color: rgba(217, 217, 214, 255) !important;">
+
+Western Bulldogs
+</td>
+
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-7
+8
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+15
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
@@ -416,51 +406,12 @@ Brisbane Lions
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-2
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
-8
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
--0.754
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;background-color: rgba(217, 217, 214, 255) !important;">
-
-Gold Coast SUNS
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
 7
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-12
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
 7
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
-8
-</td>
-
-<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
-
-8
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
@@ -470,12 +421,61 @@ Gold Coast SUNS
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-5
+10
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-5.274
+9.191
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;background-color: rgba(217, 217, 214, 255) !important;">
+
+GWS GIANTS
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+6
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+12
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+10
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+8
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+8
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+2
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+6
+</td>
+
+<td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
+
+-2.407
 </td>
 
 </tr>
@@ -524,7 +524,7 @@ Melbourne
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
--4.289
+-4.240
 </td>
 
 </tr>
@@ -533,22 +533,22 @@ Melbourne
 
 <td style="text-align:left;background-color: rgba(217, 217, 214, 255) !important;">
 
-St Kilda
+Gold Coast SUNS
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-5
+7
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-12
+11
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-12
+7
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
@@ -558,22 +558,22 @@ St Kilda
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-12
+9
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-2
+-3
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
-8
+5
 </td>
 
 <td style="text-align:right;background-color: rgba(217, 217, 214, 255) !important;">
 
--3.950
+8.121
 </td>
 
 </tr>
@@ -622,7 +622,7 @@ Collingwood
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-2.089
+3.126
 </td>
 
 </tr>
@@ -631,22 +631,17 @@ Collingwood
 
 <td style="text-align:left;background-color: rgba(255, 255, 255, 255) !important;">
 
-GWS GIANTS
+St Kilda
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-6
+5
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-10
-</td>
-
-<td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
-
-10
+11
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -656,22 +651,27 @@ GWS GIANTS
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-9
+12
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--2
+12
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-6
+0
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--2.233
+8
+</td>
+
+<td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
+
+-4.439
 </td>
 
 </tr>
@@ -690,7 +690,7 @@ Carlton
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-10
+9
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -720,7 +720,7 @@ Carlton
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-1.942
+2.300
 </td>
 
 </tr>
@@ -739,7 +739,7 @@ Port Adelaide
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-8
+7
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
@@ -769,7 +769,7 @@ Port Adelaide
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--7.313
+-9.044
 </td>
 
 </tr>
@@ -818,7 +818,7 @@ North Melbourne
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--9.721
+-10.620
 </td>
 
 </tr>
@@ -862,12 +862,12 @@ West Coast Eagles
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
-5
+6
 </td>
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--4.162
+-4.852
 </td>
 
 </tr>
@@ -916,7 +916,7 @@ Richmond
 
 <td style="text-align:right;background-color: rgba(255, 255, 255, 255) !important;">
 
--2.327
+-3.556
 </td>
 
 </tr>
@@ -965,7 +965,7 @@ Essendon
 
 <td style="text-align:right;background-color: rgba(243, 229, 0, 255) !important;">
 
-6.369
+7.872
 </td>
 
 </tr>
@@ -1355,7 +1355,7 @@ Cumulative
 
 <td style="text-align:right;">
 
-3
+5
 </td>
 
 <td style="text-align:right;">
@@ -1365,7 +1365,7 @@ Cumulative
 
 <td style="text-align:right;">
 
-79
+81
 </td>
 
 </tr>
@@ -1442,12 +1442,12 @@ Adelaide Crows
 
 <td style="text-align:right;">
 
-0.4901813
+0.5029087
 </td>
 
 <td style="text-align:right;">
 
-4
+3
 </td>
 
 <td style="text-align:right;">
@@ -1481,7 +1481,7 @@ Gold Coast SUNS
 
 <td style="text-align:right;">
 
-0.5624656
+0.5878495
 </td>
 
 <td style="text-align:right;">
@@ -1491,7 +1491,7 @@ Gold Coast SUNS
 
 <td style="text-align:right;">
 
-9
+11
 </td>
 
 <td style="text-align:left;">
@@ -1520,7 +1520,7 @@ Essendon
 
 <td style="text-align:right;">
 
-0.6077316
+0.6283166
 </td>
 
 <td style="text-align:right;">
@@ -1530,7 +1530,7 @@ Essendon
 
 <td style="text-align:right;">
 
-8
+9
 </td>
 
 <td style="text-align:left;">
@@ -1559,17 +1559,17 @@ West Coast Eagles
 
 <td style="text-align:right;">
 
-0.5535561
+0.5603587
 </td>
 
 <td style="text-align:right;">
 
--7
+-8
 </td>
 
 <td style="text-align:right;">
 
--3
+-4
 </td>
 
 <td style="text-align:left;">
@@ -1598,17 +1598,17 @@ Sydney Swans
 
 <td style="text-align:right;">
 
-0.4149418
+0.3904288
 </td>
 
 <td style="text-align:right;">
 
-5
+4
 </td>
 
 <td style="text-align:right;">
 
--1
+-4
 </td>
 
 <td style="text-align:left;">
@@ -1637,7 +1637,7 @@ Brisbane Lions
 
 <td style="text-align:right;">
 
-0.3168698
+0.2520452
 </td>
 
 <td style="text-align:right;">
@@ -1647,7 +1647,7 @@ Brisbane Lions
 
 <td style="text-align:right;">
 
--13
+-17
 </td>
 
 <td style="text-align:left;">
@@ -1676,22 +1676,22 @@ GWS GIANTS
 
 <td style="text-align:right;">
 
-0.4573944
+0.4450811
 </td>
 
 <td style="text-align:right;">
 
-4
+3
 </td>
 
 <td style="text-align:right;">
 
-1
+-1
 </td>
 
 <td style="text-align:left;">
 
-St Kilda
+GWS GIANTS
 </td>
 
 </tr>
