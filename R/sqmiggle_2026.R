@@ -3,7 +3,7 @@ source("./r/sqwiggle_helpers.R")
 # Extract pre-2025 fixtures to build starting model
 model_data_m =
   arrow::read_parquet(file = "./data/fixture_history_m.parquet") |> 
-  dplyr::filter_out(utc_start_time < lubridate::ymd("2024-1-1")) |> 
+  dplyr::filter_out(utc_start_time < lubridate::ymd("2025-1-1")) |> 
   # Add outcome variable using helper function
   dplyr::mutate(
     sqmiggle_outcome = 
@@ -20,9 +20,9 @@ carry_over = .15
 k_function = function(round) {
   
   dplyr::case_when(
-    round<6 ~ 36,
-    round<13 ~ 30,
-    TRUE ~ 24
+    round<8 ~ 40,
+    round<16 ~ 30,
+    TRUE ~ 20
     )
   
 }
