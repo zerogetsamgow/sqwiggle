@@ -19,6 +19,7 @@ fixture_history_w =
 
 # Get venues, geocode and calculate distances
 library(sf)
+google_key = readr::read_file("c:/data/r/google_api_key.txt")
 
 venues_w = 
   fixture_history_w |>
@@ -27,7 +28,7 @@ venues_w =
   mutate(venue_address = str_c(venue_location, venue_state, sep =", ")) |>
   rowwise() |> 
   mutate(
-    geocode = map(venue_address, googleway::google_geocode)
+    geocode = map(venue_address, googleway::google_geocode, "key" = google_key)
   ) |> 
   unnest_wider(geocode) |> 
   unnest(results) |> 

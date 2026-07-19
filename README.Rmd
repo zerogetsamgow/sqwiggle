@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r update_sqwiggle, include=FALSE}
+source("./r/sqwiggle_2026.R")
 source("./r/sqmiggle_2026.R")
 ```
 # Sqwiggle
@@ -28,10 +29,28 @@ A key motivation for Sqwiggle was to better understand the state of play in the 
 
 Sqwiggle's tipping performance for AFLW 2025 was admirable. Sqwiggle would have won [The Age's expert tips competition](https://www.theage.com.au/sport/afl/aflw-expert-tips-20250814-p5mn1s.html) and finished top ten in [ESPN's footy tips competition](https://www.footytips.com.au/competitions/aflw/ladders?view=ladderScores&season=747&competitionId=706852).
 
-For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder after round `r last_round` is below.
+## AFLW
+
+The predicted AFLW ladder after round `r last_round_w` is below.
 
 ```{r ladder_sqwiggle, echo=FALSE}
-combined_ladder |>
+combined_ladder_w |>
+  dplyr::rename_with(
+    \(x) stringr::str_replace_all(x,"_|club", " ") |> 
+      stringr::str_to_sentence()) |> 
+   kableExtra::kbl(format.args = list(big.mark = ","), digits = 3) |> 
+   kableExtra::kable_styling()  |> 
+   kableExtra::row_spec(1:8, background = bv.crystal) |> 
+   kableExtra::row_spec(9:17, background = bv.white) |> 
+    kableExtra::row_spec(18, background = bv.canary)
+```
+
+## AFLM
+
+For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder after round `r last_round_m` is below.
+
+```{r ladder_sqmiggle, echo=FALSE}
+combined_ladder_m |>
   dplyr::rename_with(
     \(x) stringr::str_replace_all(x,"_|club", " ") |> 
       stringr::str_to_sentence()) |> 
@@ -50,15 +69,15 @@ Here is a look at how positions are predicted to change over the remainder of th
 
 # Get labels
 ladder_labels = 
-  cumulative_ladder |> 
+  cumulative_ladder_m |> 
   dplyr::ungroup() |> 
-  dplyr::filter(round_number == last_round) |> 
+  dplyr::filter(round_number == last_round_m) |> 
   dplyr::arrange(rank) |> 
-  dplyr::mutate(round_number = last_round - .1)
+  dplyr::mutate(round_number = last_round_m - .1)
 # Create plot
 
 ggplot2::ggplot(
-  data = cumulative_ladder |> dplyr::filter(round_number >= last_round), 
+  data = cumulative_ladder_m |> dplyr::filter(round_number >= last_round_m), 
   ggplot2::aes(
     x = round_number, 
     y = rank,
@@ -72,9 +91,9 @@ ggplot2::ggplot(
   ggplot2::scale_y_discrete(
     name = NULL, labels = NULL) +
   vpstheme::scale_x_continuvps(
-    breaks = (last_round):24L, name = NULL) +
+    breaks = (last_round_m):24L, name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(last_round - 5,24.5)) +
+    xlim = c(last_round_m - 5,24.5)) +
   ggplot2::scale_colour_manual(
     values = unlist(team_colours), guide = NULL) +
   vpstheme::theme_vps_djcs(base_size = 10) +
@@ -86,14 +105,14 @@ ggplot2::ggplot(
 
 As an ELO model, Sqwiggle's assessment of teams and predictive ability is based on past performance. Sqwiggle learns as each round is played. Sqwiggle accounts for distance travelled when calculating home ground advantage.
 
-Sqwiggle's estimate of each team's ELO score for the eight rounds up to `r last_round` is shown below.
+Sqwiggle's estimate of each team's ELO score for the eight rounds up to `r last_round_m` is shown below.
 
 ```{r sqwiggle_wiggle, echo=FALSE, out.width = 2000, out.height = 1500}
 suppressWarnings(
   ggplot2::ggplot(
     data = 
       sqmiggles_2026 |> 
-      dplyr::filter(round_number >= last_round-7) |> 
+      dplyr::filter(round_number >= last_round_m - 7) |> 
       dplyr::mutate(ymin = 1500, xmin = 0),
     ggplot2::aes(
       x = round_number, 
@@ -125,7 +144,7 @@ suppressWarnings(
     breaks = 0L:24L, 
     name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(last_round-7.1,last_round)
+    xlim = c(last_round_m - 7.1,last_round_m)
   ) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours))+
@@ -141,7 +160,7 @@ suppressWarnings(
     strip.placement = "inside"))
 ```
 
-Sqwiggle's rank of each team based on their ELO score from the start of the season to after round `r last_round` is shown below.
+Sqwiggle's rank of each team based on their ELO score from the start of the season to after round `r last_round_m` is shown below.
 
 ```{r sqwiggle_rank, echo=FALSE, out.width = 2000, out.height = 1000}
 # Build table of sqwiggle rank per round
@@ -184,7 +203,7 @@ labels =
     breaks = -0L:24L, 
     name = NULL) +
   ggplot2::coord_cartesian(
-    xlim = c(-3.3,last_round)) +
+    xlim = c(-3.3,last_round_m)) +
   ggplot2::scale_colour_manual(
    values = unlist(team_colours),
    guide = NULL) +
@@ -201,7 +220,7 @@ tipping_results |>
   dplyr::group_by(round_round_number) |> 
   dplyr::summarise(correct = sum(correct), games = dplyr::n()) |> 
   dplyr::mutate(cumulative = cumsum(correct)) |> 
-  dplyr::filter(round_round_number <= last_round) |> 
+  dplyr::filter(round_round_number <= last_round_m) |> 
   dplyr::rename_with(
     \(x) stringr::str_replace_all(
       x,

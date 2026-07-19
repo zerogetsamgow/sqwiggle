@@ -1,12 +1,12 @@
 source("./r/sqwiggle_helpers.R")
 
 # Extract pre-2025 fixtures to build starting model
-model_data_m =
-  arrow::read_parquet(file = "./data/fixture_history_m.parquet") |> 
+model_data_w =
+  arrow::read_parquet(file = "./data/fixture_history_w.parquet") |> 
   dplyr::filter_out(utc_start_time < lubridate::ymd("2025-1-1")) |> 
   # Add outcome variable using helper function
   dplyr::mutate(
-    sqmiggle_outcome = 
+    sqwiggle_outcome = 
       sqwigglize_margin(home_score_total_score - away_score_total_score),
     home_game_advantage = 
       sqwigglize_hga(home_distance, away_distance)) 
@@ -15,56 +15,56 @@ model_data_m =
 library(elo)
 
 # Set parameters for model
-carry_over = .15
+carry_over = .2
 
 k_function = function(round) {
   
   dplyr::case_when(
-    round<8 ~ 40,
-    round<16 ~ 30,
+    round < 8 ~ 40,
+    round < 16 ~ 30,
     TRUE ~ 20
     )
   
 }
 
 # Build model
-sqmiggle_elo_2026 = 
+sqwiggle_elo_2026 = 
   elo.run(
-    sqmiggle_outcome ~
+    sqwiggle_outcome ~
       adjust(home_team_club_name, home_game_advantage) +
       away_team_club_name +
       regress(comp_season_name, 1500, carry_over) +
       group(round_provider_id),
-    k = k_function(model_data_m$round_round_number),
-    data = model_data_m) 
+    k = 40,
+    data = model_data_w) 
 
 # Get current season data
-season_2026_m = 
+season_2026_w = 
   tibble::tibble(
     "data" =
       purrr::pmap(
         list(2026),
         fitzRoy::fetch_fixture,
-        comp = "AFLM",
+        comp = "AFLW",
         source = "AFL")
   ) |> 
   tidyr::unnest(data) |> 
   janitor::clean_names() |> 
   dplyr::select(-tidyselect::contains("byes"))
 
-team_distance_m =
-  arrow::read_parquet(file = "./data/team_distance_m.parquet") 
+team_distance_w =
+  arrow::read_parquet(file = "./data/team_distance_w.parquet") 
 
-season_2026_m =
+season_2026_w =
   # Add home team distances
-  season_2026_m |> 
+  season_2026_w |> 
   dplyr::left_join(
-    team_distance_m |> 
+    team_distance_w |> 
       dplyr::rename(
         "home_team_club_name" = team_club_name,
         "home_distance"= venue_distance)) |> 
   dplyr::left_join(
-    team_distance_m |> 
+    team_distance_w |> 
       dplyr::rename(
         "away_team_club_name" = team_club_name,
         "away_distance"= venue_distance)) |> 
@@ -73,16 +73,16 @@ season_2026_m =
       sqwigglize_hga(home_distance, away_distance))
 
 # Generate start of season tips
-start_predict_m = 
-  season_2026_m |>  
+start_predict_w = 
+  season_2026_w |>  
   dplyr::mutate(
     prediction = 
       stats::predict(
-        sqmiggle_elo_2026, 
-        newdata = season_2026_m))
+        sqwiggle_elo_2026, 
+        newdata = season_2026_w))
 
-start_tip_tbl_m =
-  start_predict_m |> 
+start_tip_tbl_w =
+  start_predict_w |> 
   dplyr::select(
     round_round_number, 
     tidyselect::contains("club_name"), 
@@ -101,12 +101,12 @@ start_tip_tbl_m =
 
 
 # Create shells for round by round data
-tips_2026_m = tibble::tibble()
-wins_2026_m = tibble::tibble()
+tips_2026_w = tibble::tibble()
+wins_2026_w = tibble::tibble()
 
-sqmiggles_2026 = 
+sqwiggles_2026 = 
   tibble::enframe(
-    final.elos(sqmiggle_elo_2026))|>
+    final.elos(sqwiggle_elo_2026))|>
   dplyr::rename(
     "team_club_name" = name
   ) |> 
@@ -116,20 +116,20 @@ sqmiggles_2026 =
     round_number = -1)
 
 # Generatetibble()# Generate tips for season to date round by round
-last_round_m = 
-  season_2026_m |>  
+last_round_w = 
+  season_2026_w |>  
   dplyr::filter(status %in% c("CONCLUDED")) |> 
   tail(1) |> 
   dplyr::pull(round_round_number)
 
 
 
-if(rlang::is_empty(last_round_m)){last_round_m = 0}
+if(rlang::is_empty(last_round_w)){last_round_w = 0}
 
-if(last_round_m > -1){
+if(last_round_w > 0){
   # Add outcome variable using helper function
-  season_2026_m =
-    season_2026_m|> 
+  season_2026_w =
+    season_2026_w|> 
     dplyr::mutate(
       sqwiggle_outcome = 
         sqwigglize_margin(
@@ -137,19 +137,19 @@ if(last_round_m > -1){
 }
 
 
-for(.round in 0:(last_round_m + 1)) {
+for(.round in 1:(last_round_w + 1)) {
   
   # Get data for current round
-  round_data = season_2026_m |> 
+  round_data = season_2026_w |> 
     dplyr::filter(round_round_number == .round)
   
   # Run predictions
   round_predict = 
-    round_data|> 
+    round_data |> 
     dplyr::mutate(
       prediction = 
         stats::predict(
-          sqmiggle_elo_2026, 
+          sqwiggle_elo_2026, 
           newdata = round_data))
   
   # Convert to tips
@@ -170,12 +170,12 @@ for(.round in 0:(last_round_m + 1)) {
           home_team = home_team_club_name,
           away_team = away_team_club_name))
   
-  tips_2026_m = 
+  tips_2026_w = 
     dplyr::bind_rows(
-      tips_2026_m,
+      tips_2026_w,
       tip_tbl)
   
-  if(.round > -1) {
+  if(.round > 1) {
   # Get winners
   winner_tbl = 
     round_predict |> 
@@ -193,25 +193,25 @@ for(.round in 0:(last_round_m + 1)) {
       tidyselect::contains("club_name"), 
       winner)
   
-  wins_2026_m = 
+  wins_2026_w = 
     dplyr::bind_rows(
-      wins_2026_m, 
+      wins_2026_w, 
       winner_tbl)
   }
   #Update model to incorporate tipped round
-  model_data_m = 
+  model_data_w = 
     dplyr::bind_rows(
-      model_data_m, 
+      model_data_w, 
       round_data) |> 
     dplyr::mutate(
-      sqmiggle_outcome = 
+      sqwiggle_outcome = 
         sqwigglize_margin(
           home_score_total_score - 
             away_score_total_score))
   
-  sqmiggle_elo_2026 = 
+  sqwiggle_elo_2026 = 
     elo.run(
-      sqmiggle_outcome ~
+      sqwiggle_outcome ~
         adjust(
           home_team_club_name, 
           (home_game_advantage)) +
@@ -219,31 +219,31 @@ for(.round in 0:(last_round_m + 1)) {
         regress(comp_season_name, 1500, carry_over) +
         group(round_provider_id),
       k = k_function(.round),
-      data = model_data_m)
+      data = model_data_w)
   
-  round_sqmiggles = 
-    final.elos(sqmiggle_elo_2026) |>
+  round_sqwiggles = 
+    final.elos(sqwiggle_elo_2026) |>
     tibble::enframe(name = "team_club_name") |> 
     dplyr::arrange(desc(value)) |> 
     dplyr::mutate(round_number = .round)
   
-  sqmiggles_2026 = 
+  sqwiggles_2026 = 
     dplyr::bind_rows(
-      sqmiggles_2026,
-      round_sqmiggles)  
+      sqwiggles_2026,
+      round_sqwiggles)  
 }
 
 # Get data for future rounds
 future_data = 
-  season_2026_m |> 
-  dplyr::filter(round_round_number > (last_round_m+1))
+  season_2026_w |> 
+  dplyr::filter(round_round_number > (last_round_w+1))
 
 # Run predictions
 future_predict = 
   future_data |> 
   dplyr::mutate(prediction = 
            predict(
-             sqmiggle_elo_2026,
+             sqwiggle_elo_2026,
              newdata = future_data))
 
 # Convert to tips
@@ -264,9 +264,9 @@ future_tip_tbl =
         home_team = home_team_club_name,
         away_team = away_team_club_name))
 
-tips_2026_m = 
+tips_2026_w = 
   dplyr::bind_rows(
-    tips_2026_m,
+    tips_2026_w,
     future_tip_tbl)
 
 cut_off = 0
@@ -280,7 +280,7 @@ tipping_results =
         round_round_number < cut_off) |> 
      dplyr::select(-winner),
     # Use nes tip after round 12
-     tips_2026_m |> 
+     tips_2026_w |> 
       dplyr::filter_out(
         round_round_number < cut_off
       )
@@ -288,10 +288,10 @@ tipping_results =
   
 
 
-if(nrow(wins_2026_m) > 0) {
+if(nrow(wins_2026_w) > 0) {
   tipping_results =
     dplyr::left_join(
-      wins_2026_m,
+      wins_2026_w,
       tipping_results,
       by = 
         dplyr::join_by(
@@ -314,7 +314,7 @@ if(nrow(wins_2026_m) > 0) {
 # Calculate opponent strength
 
 opponents = 
-  season_2026_m |> 
+  season_2026_w |> 
   dplyr::select(
     id, round_round_number, 
     tidyselect::contains("team_club_name")) |> 
@@ -336,8 +336,8 @@ oppo_strength =
     "round_number" = round_round_number, team, opponent
   ) |> 
   dplyr::left_join(
-    sqmiggles_2026 |> 
-      dplyr::filter(round_number <= last_round_m) |> 
+    sqwiggles_2026 |> 
+      dplyr::filter(round_number <= last_round_w) |> 
       dplyr::mutate(round_number = round_number) |> 
       dplyr::rename("opponent" = team_club_name),
     by = dplyr::join_by("round_number", "opponent")
@@ -360,12 +360,12 @@ oppo_strength =
   )
 
 
-# Get actual ladder using fitZroy
-actual_ladder_m = 
+# Get actual ladder_w using fitZroy
+actual_ladder_w = 
   fitzRoy::fetch_ladder(
     season = 2026,
-  #  round_number = last_round_m,
-    comp = "AFLM",
+  #  round_number = last_round_w,
+    comp = "AFLW",
     source = "AFL"
   ) |> 
   janitor::clean_names() |>  
@@ -376,18 +376,18 @@ actual_ladder_m =
     "wins_current" = this_season_record_win_loss_record_wins,
     tidyselect::starts_with("points")) 
 
-# Generate predicted ladder 
-predicted_ladder_m =
-  tips_2026_m |> 
-  dplyr::left_join(wins_2026_m) |> 
-  dplyr::mutate(tip = dplyr::coalesce(winner,tip)) |> 
+# Generate predicted ladder_w 
+predicted_ladder_w =
+  tips_2026_w |> 
+#  dplyr::left_join(wins_2026_w) |> 
+ # dplyr::mutate(tip = dplyr::coalesce(winner,tip)) |> 
   dplyr::mutate(team_club_name = tip) |> 
   dplyr::group_by(team_club_name) |> 
   dplyr::summarise(wins_predicted = dplyr::n())
 
-if(last_round_m > - 1 ){
+if(last_round_w > 0 ){
 average_score = 
-  season_2026_m |> 
+  season_2026_w |> 
   dplyr::select(
     round_round_number, 
     tidyselect::contains("total_score")) |> 
@@ -397,7 +397,7 @@ average_score =
 }
 
 percentage_adjustment = 
-  start_tip_tbl_m |> 
+  start_tip_tbl_w |> 
   dplyr::select(
     tidyselect::contains("team"),
     margin_predicted) |> 
@@ -412,10 +412,10 @@ percentage_adjustment =
   dplyr::summarise(adjustment = sum(adjustment))
 
 # Combine and format
-combined_ladder_m =
+combined_ladder_w =
   dplyr::left_join(
-    actual_ladder_m,
-    predicted_ladder_m
+    actual_ladder_w,
+    predicted_ladder_w
   ) |> 
   dplyr::mutate(
     wins_predicted = pmax(wins_predicted,0, na.rm = TRUE)) |> 
@@ -427,7 +427,7 @@ combined_ladder_m =
     desc(wins_predicted), 
     desc(percentage)) |> 
   dplyr::mutate(position_predicted = 1:18) |> 
-  dplyr::left_join(sqmiggles_2026) |> 
+  dplyr::left_join(sqwiggles_2026) |> 
   dplyr::arrange(desc(value)) |> 
   dplyr::mutate(position_model = 1:18) |>
   dplyr::select(
@@ -449,10 +449,10 @@ combined_ladder_m =
   dplyr::arrange(position_predicted)
 
 
-cumulative_ladder_m = tibble::tibble()
+cumulative_ladder_w = tibble::tibble()
 
-for (round in 0:last_round_m) {
-  round_ladder_m = 
+for (round in 0:last_round_w) {
+  round_ladder_w = 
     fitzRoy::fetch_ladder(
       season = 2026,
       round_number = round,
@@ -466,16 +466,16 @@ for (round in 0:last_round_m) {
       position,
       "wins" =  this_season_record_win_loss_record_wins)
   
-  cumulative_ladder_m = dplyr::bind_rows(cumulative_ladder_m,round_ladder_m)
+  cumulative_ladder_w = dplyr::bind_rows(cumulative_ladder_w,round_ladder_w)
   
 }
 
-for(round in (last_round_m):23) {
-  round_ladder_m =
-    cumulative_ladder_m |> 
+for(round in (last_round_w):12) {
+  round_ladder_w =
+    cumulative_ladder_w |> 
     dplyr::filter(round_number == round) |> 
     dplyr::bind_rows(
-      tips_2026_m |> 
+      tips_2026_w |> 
       dplyr::filter(round_round_number == round +1) |> 
       tidyr::pivot_longer(tidyselect::contains('club_name'), values_to = "team_club_name") |>
       dplyr::right_join(
@@ -496,11 +496,11 @@ for(round in (last_round_m):23) {
     dplyr::arrange(desc(wins), position) |> 
     dplyr::mutate(position = 1:18)
     
-  cumulative_ladder_m = dplyr::bind_rows(cumulative_ladder_m, round_ladder_m)
+  cumulative_ladder_w = dplyr::bind_rows(cumulative_ladder_w, round_ladder_w)
 }
 
-cumulative_ladder_m = 
-  cumulative_ladder_m |> 
+cumulative_ladder_w = 
+  cumulative_ladder_w |> 
   dplyr::select(
     round_number,
     team_club_name,
