@@ -64,7 +64,7 @@ sqwigglize_hga =
 unsqwiggle_outcome = 
   function(
     outcome,
-    range_max = 70
+    range_max = 75
   ){
     margin = ((outcome -.5) * range_max) |> round()
     return(margin)
@@ -73,15 +73,16 @@ unsqwiggle_outcome =
 sqwiggle_tip =
   function(
     .margin = margin,
+    .hga = home_game_advantage,
     home_team = home_team_club_name,
     away_team = away_team_club_name) {
     
     tip = 
-      dplyr::if_else(
-        .margin >= 0,
-        home_team, 
-        away_team
-    )
+      dplyr::case_when(
+        .margin == 0 & .hga == 0 ~ away_team,
+        .margin >= 0 ~ home_team,
+        TRUE ~ away_team
+      )
     
     return(tip)
   }

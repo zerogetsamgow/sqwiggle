@@ -14,6 +14,7 @@ model_data_m =
 
 library(elo)
 
+
 # Set parameters for model
 carry_over = .15
 
@@ -58,6 +59,7 @@ team_distance_m =
 season_2026_m =
   # Add home team distances
   season_2026_m |> 
+  dplyr::filter_out(is.na(home_team_club_name)) |> 
   dplyr::left_join(
     team_distance_m |> 
       dplyr::rename(
@@ -73,7 +75,7 @@ season_2026_m =
       sqwigglize_hga(home_distance, away_distance))
 
 # Generate start of season tips
-start_predict_m = 
+start_predict_m =
   season_2026_m |>  
   dplyr::mutate(
     prediction = 
@@ -95,7 +97,8 @@ start_tip_tbl_m =
           (home_game_advantage),
         0),
     tip = sqwiggle_tip(
-      .margin = margin_predicted ,
+      .margin = margin_predicted,
+      .hga = home_game_advantage,
       home_team = home_team_club_name,
       away_team = away_team_club_name))
 
@@ -166,7 +169,8 @@ for(.round in 0:(last_round_m + 1)) {
                 (home_game_advantage), 0),
       tip = 
         sqwiggle_tip(
-          .margin = margin_predicted ,
+          .margin = margin_predicted,
+          .hga = home_game_advantage,
           home_team = home_team_club_name,
           away_team = away_team_club_name))
   
@@ -261,6 +265,7 @@ future_tip_tbl =
     tip = 
       sqwiggle_tip(
         .margin = margin_predicted,
+        .hga = home_game_advantage,
         home_team = home_team_club_name,
         away_team = away_team_club_name))
 

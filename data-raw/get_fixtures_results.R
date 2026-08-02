@@ -5,16 +5,17 @@ library(fitzRoy)
 
 # Get and save fixture history if not already obtained.
 fixture_history_w = 
-  tibble(
+  tibble::tibble(
     "data" =
-      pmap(
+      purrr::pmap(
         list(2022:2026),
         fitzRoy::fetch_fixture,
         comp = "AFLW")
   ) |> 
-  unnest(data) |> 
+  tidyr::unnest(data) |> 
   janitor::clean_names() |> 
-  mutate(venue_location = str_replace(venue_location, "Swan St", "Melbourne"))
+  dplyr::mutate(
+    venue_location = stringr::str_replace(venue_location, "Swan St", "Melbourne"))
 
 
 # Get venues, geocode and calculate distances
@@ -23,11 +24,13 @@ google_key = readr::read_file("c:/data/r/google_api_key.txt")
 
 venues_w = 
   fixture_history_w |>
-  select(venue_location, venue_state) |>
+  dplyr::select(venue_location, venue_state) |>
   unique() |> 
-  mutate(venue_address = str_c(venue_location, venue_state, sep =", ")) |>
-  rowwise() |> 
-  mutate(
+  dplyr::mutate(
+    venue_address = 
+      stringr::str_c(venue_location, venue_state, sep =", ")) |>
+  dplyr::rowwise() |> 
+  dplyr::mutate(
     geocode = map(venue_address, googleway::google_geocode, "key" = google_key)
   ) |> 
   unnest_wider(geocode) |> 

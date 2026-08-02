@@ -96,6 +96,7 @@ start_tip_tbl_w =
         0),
     tip = sqwiggle_tip(
       .margin = margin_predicted ,
+      .hga = home_game_advantage,
       home_team = home_team_club_name,
       away_team = away_team_club_name))
 
@@ -167,6 +168,7 @@ for(.round in 1:(last_round_w + 1)) {
       tip = 
         sqwiggle_tip(
           .margin = margin_predicted ,
+          .hga = home_game_advantage,
           home_team = home_team_club_name,
           away_team = away_team_club_name))
   
@@ -261,6 +263,7 @@ future_tip_tbl =
     tip = 
       sqwiggle_tip(
         .margin = margin_predicted,
+        .hga = home_game_advantage,
         home_team = home_team_club_name,
         away_team = away_team_club_name))
 

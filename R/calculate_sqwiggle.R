@@ -4,7 +4,7 @@ k_val = 20
 
 completed =
   completed |> 
-  mutate(
+  dplyr::mutate(
     sqwiggle_outcome = 
       sqwigglize_margin(home_score_total_score - away_score_total_score))
 
