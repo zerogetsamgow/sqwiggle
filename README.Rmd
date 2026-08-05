@@ -45,6 +45,24 @@ combined_ladder_w |>
     kableExtra::row_spec(18, background = bv.canary)
 ```
 
+Sqwiggle's tips for the next round of the AFLW are below.
+
+```{r tipped_by_sqwiggle, echo=FALSE}
+tip_tbl_w |> 
+  dplyr::mutate(
+    home_game_advantage =
+      round(home_game_advantage)) |> 
+  dplyr::rename_with(
+    \(x) stringr::str_replace_all(
+      x,
+      "round_number|_|club_name", " ") |> 
+      stringr::str_to_sentence()) |> 
+  knitr::kable() |> 
+  kableExtra::kable_styling()
+```
+
+
+
 ## AFLM
 
 For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder after round `r last_round_m` is below.
@@ -230,10 +248,10 @@ tipping_results |>
    kableExtra::kable_styling() 
 ```
 
-Sqwiggle's tips for the next round are below.
+Sqwiggle's tips for the next round of the AFLM are below.
 
-```{r tipped_by_sqwiggle, echo=FALSE}
-tip_tbl |> 
+```{r tipped_by_sqmiggle, echo=FALSE}
+tip_tbl_m |> 
   dplyr::mutate(
     home_game_advantage =
       round(home_game_advantage)) |> 

@@ -32,7 +32,7 @@ sqwigglize_hga =
     home_distance,
     away_distance,
     adv_max = 9, 
-    scale = 7) {
+    scale = 9) {
     
     advantage = (1/4)*pmax(5*abs(away_distance - home_distance)-1,0)^(2/3)
     hga = 
