@@ -63,6 +63,43 @@ tip_tbl_w |>
 
 
 
+```{r table_over_year, echo=FALSE, out.width = 2000, out.height = 800}
+if(last_round_w>0){
+# Get labels
+ladder_labels = 
+  cumulative_ladder_w |> 
+  dplyr::ungroup() |> 
+  dplyr::filter(round_number == max(1,last_round_w)) |> 
+  dplyr::arrange(rank) |> 
+  dplyr::mutate(round_number = max(1,last_round_w) - .1)
+# Create plot
+
+ggplot2::ggplot(
+  data = cumulative_ladder_w |> dplyr::filter(round_number >= max(1,last_round_w)), 
+  ggplot2::aes(
+    x = round_number, 
+    y = rank,
+    colour = team_club_name, 
+    group = team_club_name, 
+    label = team_club_name, 
+    fill = team_club_name) ) + 
+  ggplot2::geom_line() + 
+  ggplot2::geom_text(
+    data = ladder_labels, size = 3, hjust = 1, ) +
+  ggplot2::scale_y_discrete(
+    name = NULL, labels = NULL) +
+  vpstheme::scale_x_continuvps(
+    breaks = (max(1,last_round_w)):12L, name = NULL) +
+  ggplot2::coord_cartesian(
+    xlim = c(max(1,last_round_w)- 5,12)) +
+  ggplot2::scale_colour_manual(
+    values = unlist(team_colours), guide = NULL) +
+  vpstheme::theme_vps_djcs(base_size = 10) +
+  ggplot2::theme(axis.line = ggplot2::element_blank())
+}
+```
+
+
 ## AFLM
 
 For 2026, I have rebuilt sqwiggle to predict AFLM results. The predicted ladder after round `r last_round_m` is below.
@@ -80,44 +117,6 @@ combined_ladder_m |>
     kableExtra::row_spec(18, background = bv.canary)
 ```
 `Note: Opposition strength is the deviation from 1,500 of each team's mean opponent strength. Positive numbers indicate a team's mean opponent is above average strength, that is they have a harder than average draw. Opposition to date, is the number of above average teams played so far`
-
-Here is a look at how positions are predicted to change over the remainder of the year.
-
-```{r table_over_year, echo=FALSE, out.width = 2000, out.height = 800}
-
-# Get labels
-ladder_labels = 
-  cumulative_ladder_m |> 
-  dplyr::ungroup() |> 
-  dplyr::filter(round_number == last_round_m) |> 
-  dplyr::arrange(rank) |> 
-  dplyr::mutate(round_number = last_round_m - .1)
-# Create plot
-
-ggplot2::ggplot(
-  data = cumulative_ladder_m |> dplyr::filter(round_number >= last_round_m), 
-  ggplot2::aes(
-    x = round_number, 
-    y = rank,
-    colour = team_club_name, 
-    group = team_club_name, 
-    label = team_club_name, 
-    fill = team_club_name) ) + 
-  ggplot2::geom_line() + 
-  ggplot2::geom_text(
-    data = ladder_labels, size = 3, hjust = 1, ) +
-  ggplot2::scale_y_discrete(
-    name = NULL, labels = NULL) +
-  vpstheme::scale_x_continuvps(
-    breaks = (last_round_m):24L, name = NULL) +
-  ggplot2::coord_cartesian(
-    xlim = c(last_round_m - 5,24.5)) +
-  ggplot2::scale_colour_manual(
-    values = unlist(team_colours), guide = NULL) +
-  vpstheme::theme_vps_djcs(base_size = 10) +
-  ggplot2::theme(axis.line = ggplot2::element_blank())
-
-```
 
 ## Team strength
 

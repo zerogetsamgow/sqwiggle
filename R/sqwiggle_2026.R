@@ -9,7 +9,7 @@ model_data_w =
     sqwiggle_outcome = 
       sqwigglize_margin(home_score_total_score - away_score_total_score),
     home_game_advantage = 
-      sqwigglize_hga(home_distance, away_distance, scale = 6)) 
+      sqwigglize_hga(home_distance, away_distance, scale = 4)) 
 
 
 library(elo)
@@ -70,7 +70,7 @@ season_2026_w =
         "away_distance"= venue_distance)) |> 
   dplyr::mutate(
     home_game_advantage =
-      sqwigglize_hga(home_distance, away_distance, scale = 6))
+      sqwigglize_hga(home_distance, away_distance, scale = 4))
 
 # Generate start of season tips
 start_predict_w = 
@@ -114,7 +114,7 @@ sqwiggles_2026 =
   dplyr::arrange(
     desc(value)) |> 
   dplyr::mutate(
-    round_number = -1)
+    round_number = 0)
 
 # Generatetibble()# Generate tips for season to date round by round
 last_round_w = 
@@ -123,7 +123,7 @@ last_round_w =
   tail(1) |> 
   dplyr::pull(round_round_number)
 
-
+if(Sys.Date() < lubridate::ymd("2026-8-17")){last_round_w = 0}
 
 if(rlang::is_empty(last_round_w)){last_round_w = 0}
 
@@ -198,7 +198,7 @@ for(.round in 1:(last_round_w + 1)) {
   wins_2026_w = 
     dplyr::bind_rows(
       wins_2026_w, 
-      winner_tbl)
+      winner_tbl_w)
   }
   #Update model to incorporate tipped round
   model_data_w = 
@@ -454,12 +454,13 @@ combined_ladder_w =
 
 cumulative_ladder_w = tibble::tibble()
 
-for (round in 0:last_round_w) {
+if(last_round_w>0){
+for (round in 1:last_round_w) {
   round_ladder_w = 
     fitzRoy::fetch_ladder(
       season = 2026,
       round_number = round,
-      comp = "AFLM",
+      comp = "AFLW",
       source = "AFL"
     ) |> 
     janitor::clean_names() |>  
@@ -472,8 +473,8 @@ for (round in 0:last_round_w) {
   cumulative_ladder_w = dplyr::bind_rows(cumulative_ladder_w,round_ladder_w)
   
 }
-
-for(round in (last_round_w):12) {
+ 
+for(round in (max(1,last_round_w)):12) {
   round_ladder_w =
     cumulative_ladder_w |> 
     dplyr::filter(round_number == round) |> 
@@ -501,7 +502,6 @@ for(round in (last_round_w):12) {
     
   cumulative_ladder_w = dplyr::bind_rows(cumulative_ladder_w, round_ladder_w)
 }
-
 cumulative_ladder_w = 
   cumulative_ladder_w |> 
   dplyr::select(
@@ -513,4 +513,4 @@ cumulative_ladder_w =
     rank = factor(position, levels = 18L:1L)
   )
 
-
+}
