@@ -242,6 +242,7 @@ future_data =
   season_2026_m |> 
   dplyr::filter(round_round_number > (last_round_m+1))
 
+if(nrow(future_data)> 0) {
 # Run predictions
 future_predict = 
   future_data |> 
@@ -273,7 +274,7 @@ tips_2026_m =
   dplyr::bind_rows(
     tips_2026_m,
     future_tip_tbl_m)
-
+}
 cut_off = 0
 tipping_results =
   dplyr::bind_rows(
@@ -291,7 +292,6 @@ tipping_results =
       )
   )
   
-
 
 if(nrow(wins_2026_m) > 0) {
   tipping_results =

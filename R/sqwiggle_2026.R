@@ -9,7 +9,7 @@ model_data_w =
     sqwiggle_outcome = 
       sqwigglize_margin(home_score_total_score - away_score_total_score),
     home_game_advantage = 
-      sqwigglize_hga(home_distance, away_distance, scale = 4)) 
+      sqwigglize_hga(home_distance, away_distance, scale = 6)) 
 
 
 library(elo)
@@ -70,7 +70,7 @@ season_2026_w =
         "away_distance"= venue_distance)) |> 
   dplyr::mutate(
     home_game_advantage =
-      sqwigglize_hga(home_distance, away_distance, scale = 4))
+      sqwigglize_hga(home_distance, away_distance, scale = 6))
 
 # Generate start of season tips
 start_predict_w = 
@@ -177,7 +177,7 @@ for(.round in 1:(last_round_w + 1)) {
       tips_2026_w,
       tip_tbl_w)
   
-  if(.round > 1) {
+if(.round > 0) {
   # Get winners
   winner_tbl_w = 
     round_predict |> 
@@ -272,30 +272,13 @@ tips_2026_w =
     tips_2026_w,
     future_tip_tbl_w)
 
-cut_off = 0
-tipping_results =
-  dplyr::bind_rows(
-    # Improved model at round 13, by using less old data.
-    # Get old tips
-   arrow::read_parquet(
-      file = "./data/old_model_tips_2.parquet") |> 
-      dplyr::filter(
-        round_round_number < cut_off) |> 
-     dplyr::select(-winner),
-    # Use nes tip after round 12
-     tips_2026_w |> 
-      dplyr::filter_out(
-        round_round_number < cut_off
-      )
-  )
-  
 
 
 if(nrow(wins_2026_w) > 0) {
   tipping_results =
     dplyr::left_join(
       wins_2026_w,
-      tipping_results,
+      tips_2026_w,
       by = 
         dplyr::join_by(
           round_round_number,
